@@ -45,21 +45,28 @@ import { ProjectService } from './services/project';
         </nav>
 
         <header class="pt-56 pb-32 px-6 text-center max-w-5xl mx-auto relative">
-          <div class="inline-flex items-center gap-3 px-4 py-1.5 mb-6 rounded-full bg-amber-100 dark:bg-white/[0.03] border border-amber-200 dark:border-white/10 backdrop-blur-md">
-            <span class="relative flex h-2 w-2">
-              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-fuchsia-400 opacity-75"></span>
-              <span class="relative inline-flex rounded-full h-2 w-2 bg-fuchsia-500"></span>
-            </span>
-            <span class="text-[10px] font-bold text-amber-900 dark:text-slate-300 uppercase tracking-[0.2em]">Open to work</span>
-          </div>
-
-          <h1 class="block text-5xl md:text-6xl lg:text-7xl font-black mb-8 tracking-tighter leading-[1.1] relative group cursor-default">
-            <span class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-500 dark:from-white dark:via-white dark:to-slate-500 bg-clip-text text-transparent transition-opacity drop-shadow-sm">
-              Elian Ferreyra
-            </span>
-            <span class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-48 h-[3px] bg-gradient-to-r from-fuchsia-500 via-violet-500 to-rose-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700 ease-out rounded-full shadow-[0_0_15px_rgba(217,70,239,0.6)]"></span>
-          </h1>
-          
+  
+  <div class="mb-10 relative inline-block group cursor-pointer">
+    
+    <div class="absolute inset-0 bg-gradient-to-tr from-fuchsia-500 to-rose-500 rounded-full blur-2xl opacity-20 dark:opacity-40 animate-pulse group-hover:scale-150 group-hover:opacity-60 transition-all duration-700 ease-out"></div>
+    
+    <div class="relative w-32 h-32 md:w-44 md:h-44 rounded-full p-1 bg-gradient-to-tr from-fuchsia-500 via-violet-500 to-rose-500 shadow-2xl transition-all duration-500 ease-out group-hover:scale-105 group-hover:rotate-2">
+      
+      <div class="w-full h-full rounded-full overflow-hidden border-4 border-[#f6f4ef] dark:border-[#030712] bg-slate-200 transition-all duration-500 group-hover:border-white/20">
+      
+        <img src="imagen/perfil.png" 
+             alt="Elian Ferreyra" 
+             class="w-full h-full object-cover scale-125 object-[center_25%] transition-all duration-700 ease-in-out group-hover:scale-150">
+        </div>
+        </div>
+      </div>
+      <h1 class="block text-5xl md:text-6xl lg:text-7xl font-black mb-8 tracking-tighter leading-[1.1] relative group cursor-default">
+        <span class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-500 dark:from-white dark:via-white dark:to-slate-500 bg-clip-text text-transparent transition-opacity drop-shadow-sm">
+        Elian Ferreyra
+        </span>
+        <span class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-48 h-[3px] bg-gradient-to-r from-fuchsia-500 via-violet-500 to-rose-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700 ease-out rounded-full shadow-[0_0_15px_rgba(217,70,239,0.6)]"></span>
+        </h1>
+        
           <p class="text-slate-700 dark:text-slate-400 text-lg md:text-xl font-light leading-relaxed max-w-2xl mx-auto">
             Fullstack Developer de <span class="text-slate-900 dark:text-white font-medium">Argentina</span>. 
             Especializado en <span class="text-rose-600 font-semibold">Java</span> para el core e interfaces fluidas con <span class="text-violet-600 font-semibold">Angular</span>.
@@ -183,14 +190,17 @@ import { ProjectService } from './services/project';
         </main>
 
         <section id="contacto" class="max-w-4xl mx-auto px-6 mb-40 scroll-mt-32">
-          <div class="py-16 px-8 rounded-[3rem] bg-gradient-to-br from-white/80 via-amber-50 to-rose-50 dark:from-white/[0.03] dark:via-transparent dark:to-transparent border border-slate-200 dark:border-white/10 text-center relative overflow-hidden group hover:-translate-y-2 transition-all duration-700 hover:shadow-2xl hover:shadow-fuchsia-500/5">
-            <div class="absolute -bottom-24 -left-24 w-64 h-64 bg-fuchsia-600/10 blur-[100px] rounded-full group-hover:bg-fuchsia-600/30 group-hover:scale-150 transition-all duration-1000"></div>
-            <div class="absolute -top-24 -right-24 w-64 h-64 bg-rose-600/10 blur-[100px] rounded-full group-hover:bg-rose-600/30 group-hover:scale-150 transition-all duration-1000"></div>
+          <div class="py-16 px-8 rounded-[3rem] bg-gradient-to-br from-white/80 via-amber-50 to-rose-50 dark:from-white/[0.03] dark:via-transparent dark:to-transparent border border-slate-200 dark:border-white/10 text-center relative overflow-hidden group hover:-translate-y-2 transition-all duration-700 hover:shadow-2xl hover:shadow-fuchsia-500/5 isolate z-10">
+            <div class="absolute -bottom-24 -left-24 w-64 h-64 bg-fuchsia-600/10 blur-[100px] rounded-full group-hover:bg-fuchsia-600/30 group-hover:scale-150 transition-all duration-1000 -z-10"></div>
+            <div class="absolute -top-24 -right-24 w-64 h-64 bg-rose-600/10 blur-[100px] rounded-full group-hover:bg-rose-600/30 group-hover:scale-150 transition-all duration-1000 -z-10"></div>
+            
             <h2 class="text-[10px] font-black text-rose-500 uppercase tracking-[0.5em] mb-4 relative z-10">Ready to talk?</h2>
             <h3 class="text-4xl md:text-5xl font-bold mb-12 tracking-tighter italic dark:text-white relative z-10">¿Hagamos algo increíble?</h3>
+            
             <div class="flex flex-wrap justify-center gap-6 relative z-10 text-[11px] uppercase tracking-widest font-black">
               <a href="mailto:elianferre@hotmail.com.ar" class="px-10 py-4 bg-slate-900 dark:bg-white text-white dark:text-black rounded-2xl hover:bg-fuchsia-600 dark:hover:bg-fuchsia-500 hover:text-white hover:scale-110 active:scale-95 transition-all duration-500 shadow-xl shadow-fuchsia-500/10">Enviar Email</a>
               <a href="https://linkedin.com/in/elian-ferreyra" target="_blank" class="px-10 py-4 bg-white/50 dark:bg-transparent text-slate-900 dark:text-white rounded-2xl border border-slate-200 dark:border-white/10 hover:bg-white/5 transition-all backdrop-blur-sm hover:scale-105">LinkedIn</a>
+              <a href="https://wa.me/5492262580172" target="_blank" class="px-8 py-4 bg-gradient-to-br from-emerald-600 to-teal-700 text-white rounded-2xl hover:scale-110 active:scale-95 transition-all duration-500 shadow-xl shadow-emerald-500/10">WhatsApp</a>
             </div>
           </div>
         </section>
@@ -262,6 +272,7 @@ export class App implements OnInit {
        next: (data) => {
         this.proyectos = data.map((p: any) => {
           const tituloLower = p.titulo.toLowerCase();
+          // Lógica corregida para carpetas
           let carpeta = 'inmodoc';
           let total = 9;
           if (tituloLower.includes('inmodoc') || tituloLower.includes('gestión')) {
