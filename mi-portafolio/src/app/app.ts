@@ -136,7 +136,7 @@ import { ProjectService } from './services/project';
           
           <div *ngIf="proyectos.length > 0; else loading" class="grid grid-cols-1 md:grid-cols-2 gap-16">
             <div *ngFor="let p of proyectos" 
-                 class="group relative bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700/50 rounded-[2.5rem] overflow-hidden hover:border-fuchsia-500/60 transition-all duration-700 shadow-xl shadow-slate-200/60 dark:shadow-2xl dark:shadow-black/60 hover:-translate-y-4">
+                 class="group relative bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700/50 rounded-[2.5rem] overflow-hidden transition-all duration-700 shadow-xl hover:-translate-y-4 hover:border-fuchsia-500/80 hover:shadow-[0_0_40px_-10px_rgba(217,70,239,0.4)] dark:hover:shadow-[0_0_50px_-12px_rgba(217,70,239,0.5)]">
               
               <div class="h-80 overflow-hidden relative border-b border-slate-200 dark:border-slate-800 group/img cursor-zoom-in"
                    (click)="openModal(p)">
@@ -158,7 +158,7 @@ import { ProjectService } from './services/project';
               <div class="p-10 relative z-10">
                 <div class="flex flex-wrap gap-2 mb-6">
                   <span *ngFor="let tech of p.tecnologias" 
-                        class="text-[9px] font-bold uppercase tracking-widest text-fuchsia-700 dark:text-fuchsia-300 px-3 py-1 bg-fuchsia-50 dark:bg-fuchsia-500/10 rounded-full border border-fuchsia-200 dark:border-fuchsia-500/20 backdrop-blur-sm">
+                         class="text-[9px] font-bold uppercase tracking-widest text-fuchsia-700 dark:text-fuchsia-300 px-3 py-1 bg-fuchsia-50 dark:bg-fuchsia-500/10 rounded-full border border-fuchsia-200 dark:border-fuchsia-500/20 backdrop-blur-sm">
                     {{ tech }}
                   </span>
                 </div>
