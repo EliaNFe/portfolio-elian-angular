@@ -75,7 +75,7 @@ import { ProjectService } from './services/project';
             <div class="absolute -top-32 -right-32 w-64 h-64 bg-fuchsia-500/10 rounded-full blur-[80px] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-12 items-start relative z-10">
               <div>
-                <h2 class="text-xs font-black text-fuchsia-600 dark:text-fuchsia-500 uppercase tracking-[0.4em] mb-4">Background</h2>
+                <h2 class="text-xs font-black text-fuchsia-600 dark:text-fuchsia-500 uppercase tracking-[0.4em] mb-4">Sobre Mí</h2>
                 <h3 class="text-3xl font-bold italic tracking-tighter dark:text-white">Arquitectura & Propósito.</h3>
               </div>
               <div class="md:col-span-2 space-y-6 text-slate-700 dark:text-slate-400 text-base font-light leading-relaxed">
@@ -103,7 +103,7 @@ import { ProjectService } from './services/project';
             <div class="group relative p-8 rounded-[2rem] bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700/50 hover:border-rose-500/50 dark:hover:border-rose-500/50 transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl shadow-sm dark:shadow-none overflow-hidden cursor-default">
               <div class="absolute top-0 right-0 w-32 h-32 bg-rose-500/10 rounded-full blur-[60px] -translate-y-1/2 translate-x-1/2 opacity-0 group-hover:opacity-100 transition-all duration-700"></div>
               <div class="relative z-10">
-                <h4 class="text-xs font-black uppercase tracking-widest text-rose-600 dark:text-rose-500 mb-4 origin-left group-hover:scale-105 transition-transform duration-500">Core Backend</h4>
+                <h4 class="text-xs font-black uppercase tracking-widest text-rose-600 dark:text-rose-500 mb-4 origin-left group-hover:scale-105 transition-transform duration-500">Backend</h4>
                 <p class="text-sm text-slate-700 dark:text-slate-400 italic">Java 17+, Spring Boot, Hibernate/JPA, PostgreSQL, REST APIs.</p>
               </div>
             </div>
@@ -131,7 +131,7 @@ import { ProjectService } from './services/project';
               <h3 class="text-5xl font-bold italic tracking-tighter dark:text-white">Proyectos Seleccionados</h3>
             </div>
             <div class="h-px flex-1 bg-gradient-to-r from-rose-500/50 to-transparent mx-8 hidden md:block"></div>
-            <p class="text-slate-600 dark:text-slate-400 max-w-xs text-xs italic text-right">Soluciones reales construidas con precisión técnica.</p>
+            <p class="text-slate-600 dark:text-slate-400 max-w-xs text-xs italic text-right">Algunos de mis proyectos.</p>
           </div>
           
           <div *ngIf="proyectos.length > 0; else loading" class="grid grid-cols-1 md:grid-cols-2 gap-16">
@@ -192,7 +192,7 @@ import { ProjectService } from './services/project';
             <div class="absolute -top-24 -right-24 w-64 h-64 bg-rose-600/10 blur-[100px] rounded-full group-hover:bg-rose-600/20 group-hover:scale-150 transition-all duration-1000 -z-10"></div>
             
             <h2 class="text-[10px] font-black text-rose-600 dark:text-rose-500 uppercase tracking-[0.5em] mb-4 relative z-10">Ready to talk?</h2>
-            <h3 class="text-4xl md:text-5xl font-bold mb-12 tracking-tighter italic dark:text-white relative z-10">¿Hagamos algo increíble?</h3>
+            <h3 class="text-4xl md:text-5xl font-bold mb-12 tracking-tighter italic dark:text-white relative z-10">Contactame</h3>
             
             <div class="flex flex-wrap justify-center gap-6 relative z-10 text-[11px] uppercase tracking-widest font-black">
               <a href="mailto:elianferre@hotmail.com.ar" class="px-10 py-4 bg-slate-900 dark:bg-white text-white dark:text-black rounded-2xl hover:bg-fuchsia-600 dark:hover:bg-fuchsia-500 hover:text-white hover:scale-110 active:scale-95 transition-all duration-500 shadow-lg shadow-slate-900/20 dark:shadow-white/10">Enviar Email</a>
