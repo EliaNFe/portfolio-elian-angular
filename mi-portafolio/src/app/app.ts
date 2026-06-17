@@ -725,8 +725,8 @@ import { ProjectService } from './services/project';
   .hero-name { font-size:clamp(2.8rem, 12vw, 4rem); }
   .section { padding:3.5rem 1.2rem; }
   .bio-layout { grid-template-columns:1fr; }
-  .bio-photo { width:100%; height:220px; }
-  .bio-photo-wrap { margin-bottom:1rem; }
+  .bio-photo { width:180px; height:230px; margin:0 auto; display:block; }
+  .bio-photo-wrap { margin-bottom:1.5rem; display:flex; justify-content:center; }
   .projects-grid { grid-template-columns:1fr; }
   .contact-layout { grid-template-columns:1fr; gap:2rem; }
   .contact-row { grid-template-columns:90px 1fr auto; }
