@@ -17,11 +17,12 @@ import { ProjectService } from './services/project';
     </span>
     <div class="nav-right">
       <div class="nav-links">
-        <a href="#proyectos"><span class="dim">cd</span> proyectos</a>
-        <a href="#sobre-mi"><span class="dim">cat</span> bio</a>
-        <a href="#contacto"><span class="dim">ping</span> contacto</a>
+        <a href="#proyectos"><span class="dim">cd</span> {{ t.navProyectos }}</a>
+        <a href="#sobre-mi"><span class="dim">cat</span> {{ t.navBio }}</a>
+        <a href="#contacto"><span class="dim">ping</span> {{ t.navContacto }}</a>
       </div>
       <a href="/cv/Elian_Ferreyra_CV.pdf" target="_blank" class="nav-cv">.pdf</a>
+      <button class="lang-toggle" (click)="toggleLang()">{{ isEn ? 'ES' : 'EN' }}</button>
       <button class="theme-toggle" (click)="toggleTheme()">
         <span *ngIf="!isLight" class="toggle-icon">◐</span>
         <span *ngIf="isLight" class="toggle-icon">◑</span>
@@ -66,8 +67,8 @@ import { ProjectService } from './services/project';
         Elian Ferreyra
       </h1>
       <p class="hero-sub">
-        <span class="green">Java</span> para el core.&nbsp;
-        <span class="cyan">Angular</span> para la interfaz.
+        <span class="green">Java</span> {{ t.heroCore }}&nbsp;
+        <span class="cyan">Angular</span> {{ t.heroInterface }}
       </p>
     </div>
 
@@ -89,26 +90,25 @@ import { ProjectService } from './services/project';
       <div class="bio-photo-wrap">
         <img src="imagen/perfil.png" alt="Elian Ferreyra" class="bio-photo">
         <div class="bio-photo-badge">
-          <span class="green">●</span> disponible
+          <span class="green">●</span> {{ t.available }}
         </div>
       </div>
       <div class="bio-code-block">
         <pre class="code-preview"><span class="kw">const</span> <span class="var">dev</span> <span class="op">=</span> &#123;
-  <span class="key">nombre</span><span class="op">:</span> <span class="str">"Elian Ferreyra"</span>,
-  <span class="key">rol</span><span class="op">:</span> <span class="str">"Fullstack Developer"</span>,
-  <span class="key">base</span><span class="op">:</span> <span class="str">"Argentina 🇦🇷"</span>,
+  <span class="key">{{ t.codeNombre }}</span><span class="op">:</span> <span class="str">"Elian Ferreyra"</span>,
+  <span class="key">{{ t.codeRol }}</span><span class="op">:</span> <span class="str">"Fullstack Developer"</span>,
+  <span class="key">{{ t.codeBase }}</span><span class="op">:</span> <span class="str">"Argentina 🇦🇷"</span>,
   <span class="key">stack</span><span class="op">:</span> [
     <span class="str">"Java 17+"</span>, <span class="str">"Spring Boot"</span>,
     <span class="str">"Angular 18+"</span>, <span class="str">"TypeScript"</span>,
     <span class="str">"PostgreSQL"</span>, <span class="str">"Docker"</span>
   ],
-  <span class="key">foco</span><span class="op">:</span> <span class="str">"código mantenible y escalable"</span>
+  <span class="key">{{ t.codeFoco }}</span><span class="op">:</span> <span class="str">"{{ t.codesFocoVal }}"</span>
 &#125;</pre>
       </div>
 
       <div class="bio-text">
-        <p>Desarrollo con foco en la <strong>mantenibilidad y claridad del código</strong>. Me gusta construir soluciones que no solo funcionen hoy, sino que sean fáciles de entender y escalar mañana.</p>
-
+        <p>{{ t.bioText }}</p>
         <div class="skill-cards">
           <div class="skill-card">
             <span class="skill-tag backend">BACKEND</span>
@@ -139,37 +139,28 @@ import { ProjectService } from './services/project';
       <div class="projects-grid">
         <article class="project-card" *ngFor="let p of proyectos; let i = index"
                  (click)="openModal(p)">
-
-          <!-- imagen con overlay -->
           <div class="proj-img-wrap">
             <img [src]="p.imagenSeleccionada || p.imagen" [alt]="p.titulo" class="proj-img">
             <div class="proj-img-overlay">
-              <span class="proj-open-hint">▶ ver galería</span>
+              <span class="proj-open-hint">▶ {{ t.verGaleria }}</span>
             </div>
             <div class="proj-scanlines"></div>
-
-            <!-- miniaturas -->
             <div class="proj-thumbs" (click)="$event.stopPropagation()">
               <img *ngFor="let img of p.galeria?.slice(0,4)"
-                   [src]="img"
-                   class="proj-thumb"
+                   [src]="img" class="proj-thumb"
                    (mouseenter)="p.imagenSeleccionada = img"
                    (click)="openModal(p, img)">
             </div>
           </div>
-
-          <!-- info -->
           <div class="proj-info">
             <div class="proj-path">
               <span class="green">~/proyectos/</span><span class="proj-slug">{{ slug(p.titulo) }}</span>
             </div>
             <h3 class="proj-title">{{ p.titulo }}</h3>
             <p class="proj-desc">{{ p.descripcion }}</p>
-
             <div class="proj-tech-row">
-              <span class="tech-pill" *ngFor="let t of p.tecnologias">{{ t }}</span>
+              <span class="tech-pill" *ngFor="let t2 of p.tecnologias">{{ t2 }}</span>
             </div>
-
             <div class="proj-actions" (click)="$event.stopPropagation()">
               <a [href]="p.github" target="_blank" class="btn-ghost">
                 <span>&#123; &#125;</span> GitHub
@@ -184,10 +175,8 @@ import { ProjectService } from './services/project';
     </ng-container>
 
     <ng-template #loading>
-      <div class="loading-bar">
-        <div class="loading-progress"></div>
-      </div>
-      <p class="loading-text">inicializando sistema...</p>
+      <div class="loading-bar"><div class="loading-progress"></div></div>
+      <p class="loading-text">{{ t.loading }}</p>
     </ng-template>
   </section>
 
@@ -201,8 +190,8 @@ import { ProjectService } from './services/project';
 
     <div class="contact-layout">
       <div class="contact-big">
-        <h2 class="contact-h2">¿Trabajamos<br><em>juntos?</em></h2>
-        <p class="contact-sub">Abierto a proyectos freelance y posiciones full-time.</p>
+        <h2 class="contact-h2">{{ t.contactH2a }}<br><em>{{ t.contactH2b }}</em></h2>
+        <p class="contact-sub">{{ t.contactSub }}</p>
       </div>
 
       <div class="contact-list">
@@ -233,7 +222,7 @@ import { ProjectService } from './services/project';
     <span class="muted">Argentina</span>
     <span class="muted">·</span>
     <span class="muted">2026</span>
-    <span class="footer-right muted">Hecho con Angular + TypeScript</span>
+    <span class="footer-right muted">{{ t.footerMade }}</span>
   </footer>
 
   <!-- ░░ MODAL ░░ -->
@@ -300,6 +289,15 @@ import { ProjectService } from './services/project';
   font-size:1rem; transition:border-color 0.2s, color 0.2s;
 }
 .theme-toggle:hover { border-color:var(--green); color:var(--green); }
+.lang-toggle {
+  background:none; border:1px solid var(--border);
+  color:var(--muted); cursor:pointer;
+  padding:0 0.65rem; height:2rem;
+  font-family:'JetBrains Mono', monospace;
+  font-size:0.65rem; letter-spacing:0.1em;
+  transition:border-color 0.2s, color 0.2s;
+}
+.lang-toggle:hover { border-color:var(--cyan); color:var(--cyan); }
 
 /* ── HERO ─────────────────────────────────────── */
 .hero {
@@ -741,6 +739,7 @@ export class App implements OnInit, OnDestroy, AfterViewInit {
   private resizeObs!: ResizeObserver;
   proyectos: any[]  = [];
   isLight: boolean  = false;
+  isEn: boolean     = false;
   scrolled: boolean = false;
   glitchOn: boolean = false;
   proyectoActivo: any = null;
@@ -749,12 +748,41 @@ export class App implements OnInit, OnDestroy, AfterViewInit {
   termDone: boolean   = false;
   private termTimer: any;
 
+  es = {
+    navProyectos: 'proyectos', navBio: 'bio', navContacto: 'contacto',
+    heroCore: 'para el core.', heroInterface: 'para la interfaz.',
+    available: 'disponible',
+    codeNombre: 'nombre', codeRol: 'rol', codeBase: 'base', codeFoco: 'foco',
+    codesFocoVal: 'código mantenible y escalable',
+    bioText: 'Desarrollo con foco en la mantenibilidad y claridad del código. Me gusta construir soluciones que no solo funcionen hoy, sino que sean fáciles de entender y escalar mañana.',
+    verGaleria: 'ver galería',
+    loading: 'inicializando sistema...',
+    contactH2a: '¿Trabajamos', contactH2b: 'juntos?',
+    contactSub: 'Abierto a proyectos freelance y posiciones full-time.',
+    footerMade: 'Hecho con Angular + TypeScript',
+  };
+
+  en = {
+    navProyectos: 'projects', navBio: 'bio', navContacto: 'contact',
+    heroCore: 'for the core.', heroInterface: 'for the interface.',
+    available: 'available',
+    codeNombre: 'name', codeRol: 'role', codeBase: 'location', codeFoco: 'focus',
+    codesFocoVal: 'maintainable and scalable code',
+    bioText: 'I build with a focus on maintainability and code clarity. I like to create solutions that not only work today, but are easy to understand and scale tomorrow.',
+    verGaleria: 'view gallery',
+    loading: 'initializing system...',
+    contactH2a: "Let's work", contactH2b: 'together.',
+    contactSub: 'Open to freelance projects and full-time positions.',
+    footerMade: 'Built with Angular + TypeScript',
+  };
+
+  get t() { return this.isEn ? this.en : this.es; }
+
   termLines = [
     { prompt: 'elian@portfolio:~$', text: 'whoami',                        cls: 't-cmd' },
     { prompt: '',                   text: 'Elian Ferreyra — Dev Fullstack', cls: 't-out' },
     { prompt: 'elian@portfolio:~$', text: 'cat stack.txt',                 cls: 't-cmd' },
     { prompt: '',                   text: 'Java · Spring · Angular · SQL', cls: 't-ok'  },
-    {prompt: '',                    text: 'NextJs · Python · Clean Code',  cls: 't-ok'  },
     { prompt: 'elian@portfolio:~$', text: 'ping recruiter',                cls: 't-cmd' },
     { prompt: '',                   text: '✔ disponible para proyectos',   cls: 't-ok'  },
   ];
@@ -763,6 +791,7 @@ export class App implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnInit() {
     this.initTheme();
+    this.isEn = localStorage.getItem('lang') === 'en';
     this.loadProjects();
     this.startTerminalAnim();
   }
@@ -849,6 +878,12 @@ export class App implements OnInit, OnDestroy, AfterViewInit {
     this.isLight = !this.isLight;
     localStorage.setItem('theme', this.isLight ? 'light' : 'dark');
     this.applyTheme();
+  }
+
+  toggleLang() {
+    this.isEn = !this.isEn;
+    localStorage.setItem('lang', this.isEn ? 'en' : 'es');
+    this.cdr.detectChanges();
   }
 
   applyTheme() {
