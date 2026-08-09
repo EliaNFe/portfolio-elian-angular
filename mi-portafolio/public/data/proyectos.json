@@ -5,7 +5,9 @@
     "descripcion": "Software as a Service integral para la gestión de propiedades, clientes, contratos, Creacion de Tasaciones y generacion de comprobantes. Incluye panel de administración y usuarios admin/empleado.",
     "imagen": "https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=80&w=500",
     "tecnologias": ["JAVA", "Tailwind", "Spring Boot", "SQL", "Hibernate/JPA"],
-    "github": "https://github.com/EliaNFe/Inmobiliaria_gestion_comprobantes"
+    "github": "https://github.com/EliaNFe/Inmobiliaria_gestion_comprobantes",
+    "carpeta": "inmodoc",
+    "totalFotos": 9
   },
   {
     "id": 2,
@@ -13,6 +15,18 @@
     "descripcion": "Aplicación para la reserva y administración de citas en tiempo real. Optimiza la agenda y permite un seguimiento eficiente de los clientes.",
     "imagen": "https://images.unsplash.com/photo-1506784983877-45594efa4cbe?q=80&w=500",
     "tecnologias": ["JAVA", "Bootstrap", "Spring Boot", "SQL", "Hibernate/JPA"],
-    "github": "https://github.com/EliaNFe/sistema-turnos-backend"
+    "github": "https://github.com/EliaNFe/sistema-turnos-backend",
+    "carpeta": "turnos",
+    "totalFotos": 11
+  },
+  {
+    "id": 3,
+    "titulo": "Inmobiliaria Liliana Cirigliano",
+    "descripcion": "Sitio web para una inmobiliaria real en Necochea. Catálogo público de propiedades con filtros, paginado y carrusel de imágenes, más un panel de administración para gestionar propiedades, imágenes y configuración del sitio sin tocar código. Autenticación server-side, Row Level Security y rate limiting en el login.",
+    "imagen": "imagen/inmobiliaria/foto1.png",
+    "tecnologias": ["Next.js", "TypeScript", "Tailwind CSS", "Supabase", "Vercel"],
+    "github": "https://github.com/EliaNFe/Pagina_Inmobiliaria",
+    "carpeta": "inmobiliaria",
+    "totalFotos": 6
   }
 ]

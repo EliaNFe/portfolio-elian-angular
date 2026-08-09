@@ -1,12 +1,12 @@
 import { Component, OnInit, OnDestroy, AfterViewInit, ChangeDetectorRef, HostListener, NgZone, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet } from '@angular/router';
 import { ProjectService } from './services/project';
+
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, CommonModule],
+  imports: [CommonModule],
   template: `
 <div class="site">
 
@@ -101,6 +101,7 @@ import { ProjectService } from './services/project';
   <span class="key">stack</span><span class="op">:</span> [
     <span class="str">"Java 17+"</span>, <span class="str">"Spring Boot"</span>,
     <span class="str">"Angular 18+"</span>, <span class="str">"TypeScript"</span>,
+    <span class="str">"Next.js"</span>, <span class="str">"Supabase"</span>,
     <span class="str">"PostgreSQL"</span>, <span class="str">"Docker"</span>
   ],
   <span class="key">{{ t.codeFoco }}</span><span class="op">:</span> <span class="str">"{{ t.codesFocoVal }}"</span>
@@ -112,15 +113,15 @@ import { ProjectService } from './services/project';
         <div class="skill-cards">
           <div class="skill-card">
             <span class="skill-tag backend">BACKEND</span>
-            <p>Java 17+, Spring Boot, Hibernate/JPA, PostgreSQL, REST APIs.</p>
+            <p>Java 17+, Spring Boot, Hibernate/JPA, PostgreSQL, REST APIs, Node.js, Supabase.</p>
           </div>
           <div class="skill-card">
             <span class="skill-tag frontend">FRONTEND</span>
-            <p>Angular 18+, TypeScript, Tailwind CSS.</p>
+            <p>Angular 18+, Next.js, TypeScript, Tailwind CSS.</p>
           </div>
           <div class="skill-card">
             <span class="skill-tag tools">TOOLS</span>
-            <p>Git, GitHub, Docker, Maven, Postman.</p>
+            <p>Git, GitHub, Docker, Maven, Postman, Vercel.</p>
           </div>
         </div>
       </div>
@@ -782,7 +783,7 @@ export class App implements OnInit, OnDestroy, AfterViewInit {
     { prompt: 'elian@portfolio:~$', text: 'whoami',                        cls: 't-cmd' },
     { prompt: '',                   text: 'Elian Ferreyra — Dev Fullstack', cls: 't-out' },
     { prompt: 'elian@portfolio:~$', text: 'cat stack.txt',                 cls: 't-cmd' },
-    { prompt: '',                   text: 'Java · Spring · Angular · SQL', cls: 't-ok'  },
+    { prompt: '',                   text: 'Java · Spring · Angular · SQL · NextJs · NodeJs', cls: 't-ok'  },
     { prompt: 'elian@portfolio:~$', text: 'ping recruiter',                cls: 't-cmd' },
     { prompt: '',                   text: '✔ disponible para proyectos',   cls: 't-ok'  },
   ];
@@ -896,10 +897,12 @@ export class App implements OnInit, OnDestroy, AfterViewInit {
     this.projectService.getProjects().subscribe({
       next: (data) => {
         this.proyectos = data.map((p: any) => {
-          const t = p.titulo.toLowerCase();
-          let carpeta = 'inmodoc', total = 9;
-          if (t.includes('inmodoc') || t.includes('gestión')) { carpeta = 'turnos'; total = 11; }
-          const galeria = Array.from({ length: total }, (_, j) => `imagen/${carpeta}/foto${j + 1}.png`);
+          // La galería sale directo del JSON: "carpeta" es la subcarpeta en
+          // public/imagen/ y "totalFotos" cuántas foto1.png..fotoN.png hay ahí.
+          // Si un proyecto no define esos campos, usa solo su "imagen" como única foto.
+          const galeria = (p.carpeta && p.totalFotos)
+            ? Array.from({ length: p.totalFotos }, (_, j) => `imagen/${p.carpeta}/foto${j + 1}.png`)
+            : [p.imagen];
           return { ...p, galeria, imagenSeleccionada: galeria[0] };
         });
         this.cdr.detectChanges();
