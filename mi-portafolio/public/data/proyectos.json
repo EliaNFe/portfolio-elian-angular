@@ -28,5 +28,25 @@
     "github": "https://github.com/EliaNFe/Pagina_Inmobiliaria",
     "carpeta": "inmobiliaria",
     "totalFotos": 6
+  },
+  {
+    "id": 4,
+    "titulo": "Web para una clínica estética",
+    "descripcion": "Sitio web completo para una clínica estética, con landing pública y reserva de turnos sin registro. Incluye cálculo de disponibilidad, prevención de turnos superpuestos y un panel privado para administrar la agenda, los clientes y los servicios.",
+    "imagen": "imagen/clinica-estetica/foto1.png",
+    "tecnologias": ["Next.js", "TypeScript", "Supabase", "PostgreSQL", "Zod"],
+    "github": "https://github.com/EliaNFe/Turnero_clinica",
+    "carpeta": "clinica-estetica",
+    "totalFotos": 9
+  },
+  {
+    "id": 5,
+    "titulo": "Ecommerce con Microservicios",
+    "descripcion": "Ecommerce con frontend en Angular y backend distribuido en cuatro microservicios independientes. Implementa API Gateway, autenticación con JWT y roles, bases de datos por servicio, gestión de catálogo, órdenes y pagos, y una saga con compensación de stock ante pagos rechazados.",
+    "imagen": "imagen/ecommerce-microservicios/foto1.png",
+    "tecnologias": ["Java", "Spring Boot", "Angular", "PostgreSQL", "Docker"],
+    "github": "https://github.com/EliaNFe/microservicio_ecommerce",
+    "carpeta": "ecommerce-microservicios",
+    "totalFotos": 11
   }
 ]
