@@ -23,7 +23,9 @@ import { ProjectService } from './services/project';
       </div>
       <a href="/cv/Elian_Ferreyra_CV.pdf" target="_blank" class="nav-cv">.pdf</a>
       <button class="lang-toggle" (click)="toggleLang()">{{ isEn ? 'ES' : 'EN' }}</button>
-      <button class="theme-toggle" (click)="toggleTheme()">
+      <button class="theme-toggle" (click)="toggleTheme($event)"
+              [attr.aria-label]="isLight ? t.activarOscuro : t.activarClaro"
+              [attr.title]="isLight ? t.activarOscuro : t.activarClaro">
         <span *ngIf="!isLight" class="toggle-icon">◐</span>
         <span *ngIf="isLight" class="toggle-icon">◑</span>
       </button>
@@ -159,6 +161,12 @@ import { ProjectService } from './services/project';
             </div>
             <h3 class="proj-title">{{ p.titulo }}</h3>
             <p class="proj-desc">{{ p.descripcion }}</p>
+            <dl class="proj-story">
+              <div class="story-item"><dt>{{ t.problema }}</dt><dd>{{ p.problema }}</dd></div>
+              <div class="story-item"><dt>{{ t.decision }}</dt><dd>{{ p.decision }}</dd></div>
+              <div class="story-item"><dt>{{ t.impacto }}</dt><dd>{{ p.impacto }}</dd></div>
+              <div class="story-item"><dt>{{ t.aprendizaje }}</dt><dd>{{ p.aprendizaje }}</dd></div>
+            </dl>
             <div class="proj-tech-row">
               <span class="tech-pill" *ngFor="let t2 of p.tecnologias">{{ t2 }}</span>
             </div>
@@ -579,6 +587,16 @@ import { ProjectService } from './services/project';
 }
 .project-card:hover .proj-title { color:var(--green); }
 .proj-desc { font-size:0.82rem; color:var(--muted); line-height:1.7; margin-bottom:1.2rem; }
+.proj-story { display:grid; gap:0; margin:0 0 1.2rem; border-top:1px solid var(--border); }
+.story-item {
+  display:grid; grid-template-columns:6.7rem 1fr; gap:0.8rem;
+  padding:0.72rem 0; border-bottom:1px solid var(--border);
+}
+.story-item dt {
+  color:var(--green); font:600 0.61rem/1.55 'JetBrains Mono', monospace;
+  text-transform:uppercase;
+}
+.story-item dd { color:var(--muted); font-size:0.76rem; line-height:1.55; }
 .proj-tech-row { display:flex; flex-wrap:wrap; gap:0.4rem; margin-bottom:1.2rem; }
 .tech-pill {
   font-family:'JetBrains Mono', monospace;
@@ -727,6 +745,7 @@ import { ProjectService } from './services/project';
   .bio-photo { width:180px; height:230px; margin:0 auto; display:block; }
   .bio-photo-wrap { margin-bottom:1.5rem; display:flex; justify-content:center; }
   .projects-grid { grid-template-columns:1fr; }
+  .story-item { grid-template-columns:1fr; gap:0.25rem; }
   .contact-layout { grid-template-columns:1fr; gap:2rem; }
   .contact-row { grid-template-columns:90px 1fr auto; }
   .footer { padding:1.5rem 1.2rem; flex-wrap:wrap; gap:0.5rem; }
@@ -757,6 +776,8 @@ export class App implements OnInit, OnDestroy, AfterViewInit {
     codesFocoVal: 'código mantenible y escalable',
     bioText: 'Desarrollo con foco en la mantenibilidad y claridad del código. Me gusta construir soluciones que no solo funcionen hoy, sino que sean fáciles de entender y escalar mañana.',
     verGaleria: 'ver galería',
+    problema: 'Problema', decision: 'Decisión', impacto: 'Impacto', aprendizaje: 'Aprendizaje',
+    activarClaro: 'Activar tema claro', activarOscuro: 'Activar tema oscuro',
     loading: 'inicializando sistema...',
     contactH2a: '¿Trabajamos', contactH2b: 'juntos?',
     contactSub: 'Abierto a proyectos freelance y posiciones full-time.',
@@ -771,6 +792,8 @@ export class App implements OnInit, OnDestroy, AfterViewInit {
     codesFocoVal: 'maintainable and scalable code',
     bioText: 'I build with a focus on maintainability and code clarity. I like to create solutions that not only work today, but are easy to understand and scale tomorrow.',
     verGaleria: 'view gallery',
+    problema: 'Problem', decision: 'Decision', impacto: 'Impact', aprendizaje: 'Learning',
+    activarClaro: 'Switch to light theme', activarOscuro: 'Switch to dark theme',
     loading: 'initializing system...',
     contactH2a: "Let's work", contactH2b: 'together.',
     contactSub: 'Open to freelance projects and full-time positions.',
@@ -803,7 +826,8 @@ export class App implements OnInit, OnDestroy, AfterViewInit {
 
   initCanvas() {
     const canvas = this.canvasRef.nativeElement;
-    const ctx = canvas.getContext('2d')!;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
     const spacing = 32;
     let w = 0, h = 0, t = 0;
     const isDark = () => !this.isLight;
@@ -875,10 +899,30 @@ export class App implements OnInit, OnDestroy, AfterViewInit {
     this.applyTheme();
   }
 
-  toggleTheme() {
-    this.isLight = !this.isLight;
-    localStorage.setItem('theme', this.isLight ? 'light' : 'dark');
-    this.applyTheme();
+  toggleTheme(event: MouseEvent) {
+    const button = event.currentTarget as HTMLElement;
+    const rect = button.getBoundingClientRect();
+    const x = rect.left + rect.width / 2;
+    const y = rect.top + rect.height / 2;
+    const root = document.documentElement;
+    root.style.setProperty('--theme-x', `${x}px`);
+    root.style.setProperty('--theme-y', `${y}px`);
+
+    const changeTheme = () => {
+      this.isLight = !this.isLight;
+      localStorage.setItem('theme', this.isLight ? 'light' : 'dark');
+      this.applyTheme();
+    };
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const doc = document as Document & {
+      startViewTransition?: (callback: () => void) => { finished: Promise<void> };
+    };
+
+    if (!doc.startViewTransition || prefersReducedMotion) {
+      changeTheme();
+      return;
+    }
+    doc.startViewTransition(changeTheme);
   }
 
   toggleLang() {

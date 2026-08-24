@@ -2,51 +2,61 @@
   {
     "id": 1,
     "titulo": "SaaS Inmobiliario",
-    "descripcion": "Software as a Service integral para la gestión de propiedades, clientes, contratos, Creacion de Tasaciones y generacion de comprobantes. Incluye panel de administración y usuarios admin/empleado.",
+    "descripcion": "Centralicé la operación diaria de una inmobiliaria en una sola plataforma, desde el seguimiento de clientes hasta la emisión de comprobantes.",
+    "problema": "La información de propiedades, clientes, contratos y tasaciones estaba repartida en procesos separados, lo que dificultaba mantener cada operación conectada.",
+    "decision": "Modelé el dominio con Spring Boot, JPA y SQL, y separé permisos de administrador y empleado para que cada perfil acceda solo a las tareas que le corresponden.",
+    "impacto": "El sistema concentra la gestión comercial y genera tasaciones y comprobantes desde los mismos datos, reduciendo pasos manuales y duplicación de información.",
+    "aprendizaje": "Aprendí a traducir un proceso de negocio amplio en entidades, relaciones y permisos mantenibles, en lugar de pensar la aplicación como pantallas aisladas.",
     "imagen": "https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=80&w=500",
     "tecnologias": ["JAVA", "Tailwind", "Spring Boot", "SQL", "Hibernate/JPA"],
-    "github": "https://github.com/EliaNFe/Inmobiliaria_gestion_comprobantes",
-    "carpeta": "inmodoc",
-    "totalFotos": 9
+    "github": "https://github.com/EliaNFe/Inmobiliaria_gestion_comprobantes", "carpeta": "inmodoc", "totalFotos": 9
   },
   {
     "id": 2,
     "titulo": "Sistema de Gestión de Turnos",
-    "descripcion": "Aplicación para la reserva y administración de citas en tiempo real. Optimiza la agenda y permite un seguimiento eficiente de los clientes.",
+    "descripcion": "Construí una agenda compartida que ordena la reserva y administración de citas entre clientes y profesionales.",
+    "problema": "Gestionar turnos sin una fuente única de disponibilidad facilita errores, cambios difíciles de seguir y una agenda desactualizada.",
+    "decision": "Concentré las reglas de alta, modificación y cancelación en un backend con Spring Boot y persistencia relacional mediante Hibernate/JPA.",
+    "impacto": "Clientes y profesionales trabajan sobre la misma agenda y los cambios quedan persistidos, haciendo más claro el estado de cada cita.",
+    "aprendizaje": "Profundicé en cómo proteger la consistencia de datos cuando varias acciones modifican un recurso sensible como la disponibilidad.",
     "imagen": "https://images.unsplash.com/photo-1506784983877-45594efa4cbe?q=80&w=500",
     "tecnologias": ["JAVA", "Bootstrap", "Spring Boot", "SQL", "Hibernate/JPA"],
-    "github": "https://github.com/EliaNFe/sistema-turnos-backend",
-    "carpeta": "turnos",
-    "totalFotos": 11
+    "github": "https://github.com/EliaNFe/sistema-turnos-backend", "carpeta": "turnos", "totalFotos": 11
   },
   {
     "id": 3,
     "titulo": "Inmobiliaria Liliana Cirigliano",
-    "descripcion": "Sitio web para una inmobiliaria real en Necochea. Catálogo público de propiedades con filtros, paginado y carrusel de imágenes, más un panel de administración para gestionar propiedades, imágenes y configuración del sitio sin tocar código. Autenticación server-side, Row Level Security y rate limiting en el login.",
+    "descripcion": "Digitalicé el catálogo de una inmobiliaria real de Necochea y le di autonomía para mantenerlo sin depender de cambios en el código.",
+    "problema": "La inmobiliaria necesitaba mostrar propiedades de forma clara y actualizar publicaciones, imágenes y datos del sitio sin asistencia técnica constante.",
+    "decision": "Usé Next.js y Supabase para combinar un catálogo rápido con un panel privado; protegí la administración con autenticación server-side, Row Level Security y rate limiting.",
+    "impacto": "Los visitantes pueden filtrar y recorrer el catálogo, mientras el equipo administra el contenido completo desde una interfaz propia sin tocar código.",
+    "aprendizaje": "Aprendí que entregar autonomía al cliente exige diseñar tanto la experiencia pública como permisos y operaciones administrativas seguras.",
     "imagen": "imagen/inmobiliaria/foto1.png",
     "tecnologias": ["Next.js", "TypeScript", "Tailwind CSS", "Supabase", "Vercel"],
-    "github": "https://github.com/EliaNFe/Pagina_Inmobiliaria",
-    "carpeta": "inmobiliaria",
-    "totalFotos": 6
+    "github": "https://github.com/EliaNFe/Pagina_Inmobiliaria", "carpeta": "inmobiliaria", "totalFotos": 6
   },
   {
     "id": 4,
     "titulo": "Web para una clínica estética",
-    "descripcion": "Sitio web completo para una clínica estética, con landing pública y reserva de turnos sin registro. Incluye cálculo de disponibilidad, prevención de turnos superpuestos y un panel privado para administrar la agenda, los clientes y los servicios.",
+    "descripcion": "Convertí la consulta y reserva de tratamientos en un flujo directo, sin registro, conectado con la agenda interna de la clínica.",
+    "problema": "Coordinar reservas manualmente consume tiempo y puede producir turnos superpuestos, pero exigir una cuenta agrega fricción innecesaria al paciente.",
+    "decision": "Diseñé un flujo público sin registro y calculé la disponibilidad en función de la agenda; validé los datos con Zod y reforcé en PostgreSQL la prevención de solapamientos.",
+    "impacto": "Los pacientes reservan con menos pasos y la clínica recibe turnos consistentes en un panel donde también administra clientes y servicios.",
+    "aprendizaje": "Aprendí a tratar la disponibilidad como una regla de negocio crítica que debe validarse en más de una capa, no solo en la interfaz.",
     "imagen": "imagen/clinica-estetica/foto1.png",
     "tecnologias": ["Next.js", "TypeScript", "Supabase", "PostgreSQL", "Zod"],
-    "github": "https://github.com/EliaNFe/Turnero_clinica",
-    "carpeta": "clinica-estetica",
-    "totalFotos": 9
+    "github": "https://github.com/EliaNFe/Turnero_clinica", "carpeta": "clinica-estetica", "totalFotos": 9
   },
   {
     "id": 5,
     "titulo": "Ecommerce con Microservicios",
-    "descripcion": "Ecommerce con frontend en Angular y backend distribuido en cuatro microservicios independientes. Implementa API Gateway, autenticación con JWT y roles, bases de datos por servicio, gestión de catálogo, órdenes y pagos, y una saga con compensación de stock ante pagos rechazados.",
+    "descripcion": "Diseñé un ecommerce distribuido que mantiene coordinados catálogo, órdenes, pagos y stock incluso cuando una operación falla.",
+    "problema": "Separar un proceso de compra entre servicios independientes introduce fallos parciales: un pago rechazado no puede dejar stock reservado ni una orden en un estado incorrecto.",
+    "decision": "Dividí el backend en cuatro microservicios con base de datos por servicio, unifiqué el acceso mediante API Gateway y usé una saga con acciones de compensación.",
+    "impacto": "El flujo puede revertir la reserva de stock cuando el pago falla, manteniendo la consistencia del negocio sin acoplar todos los servicios a una sola base.",
+    "aprendizaje": "Entendí el costo real de una arquitectura distribuida: la independencia de despliegue exige diseñar explícitamente estados, fallos, seguridad y compensaciones.",
     "imagen": "imagen/ecommerce-microservicios/foto1.png",
     "tecnologias": ["Java", "Spring Boot", "Angular", "PostgreSQL", "Docker"],
-    "github": "https://github.com/EliaNFe/microservicio_ecommerce",
-    "carpeta": "ecommerce-microservicios",
-    "totalFotos": 11
+    "github": "https://github.com/EliaNFe/microservicio_ecommerce", "carpeta": "ecommerce-microservicios", "totalFotos": 11
   }
 ]
