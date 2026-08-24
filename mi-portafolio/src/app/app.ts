@@ -735,38 +735,38 @@ import { ProjectService } from './services/project';
 
 /* Light theme: keep every surface in the same muted, high-contrast palette. */
 :host-context(body.light) .nav.scrolled {
-  background:rgba(227,216,197,0.92);
-  box-shadow:0 1px 18px rgba(53,47,40,0.1);
+  background:rgba(244,247,246,0.92);
+  box-shadow:0 1px 18px rgba(23,32,51,0.08);
 }
 :host-context(body.light) .terminal-window {
-  background:rgba(216,203,181,0.95);
-  box-shadow:0 0 40px rgba(63,107,79,0.09), 0 20px 60px rgba(53,47,40,0.2);
+  background:rgba(255,255,255,0.96);
+  box-shadow:0 0 40px rgba(15,118,110,0.08), 0 20px 60px rgba(23,32,51,0.13);
 }
 :host-context(body.light) .scanlines {
   background:repeating-linear-gradient(
     0deg,
     transparent,
     transparent 2px,
-    rgba(63,107,79,0.03) 2px,
-    rgba(63,107,79,0.03) 4px
+    rgba(15,118,110,0.025) 2px,
+    rgba(15,118,110,0.025) 4px
   );
 }
-:host-context(body.light) .str { color:#8A5735; }
-:host-context(body.light) .skill-tag.backend { background:rgba(57,112,120,0.13); }
-:host-context(body.light) .skill-tag.frontend { background:rgba(63,107,79,0.13); }
-:host-context(body.light) .skill-tag.tools { background:rgba(161,79,85,0.11); }
+:host-context(body.light) .str { color:#9A4F0D; }
+:host-context(body.light) .skill-tag.backend { background:rgba(3,105,161,0.10); }
+:host-context(body.light) .skill-tag.frontend { background:rgba(15,118,110,0.10); }
+:host-context(body.light) .skill-tag.tools { background:rgba(180,35,60,0.09); }
 :host-context(body.light) .project-card:hover {
-  box-shadow:0 10px 30px rgba(63,107,79,0.14);
+  box-shadow:0 12px 32px rgba(15,118,110,0.13);
 }
-:host-context(body.light) .proj-img-overlay { background:rgba(63,107,79,0.09); }
-:host-context(body.light) .proj-thumb { border-color:rgba(63,107,79,0.5); }
-:host-context(body.light) .project-card:hover .tech-pill { border-color:rgba(63,107,79,0.45); }
-:host-context(body.light) .modal-overlay { background:rgba(53,47,40,0.9); }
+:host-context(body.light) .proj-img-overlay { background:rgba(15,118,110,0.08); }
+:host-context(body.light) .proj-thumb { border-color:rgba(15,118,110,0.5); }
+:host-context(body.light) .project-card:hover .tech-pill { border-color:rgba(15,118,110,0.45); }
+:host-context(body.light) .modal-overlay { background:rgba(23,32,51,0.88); }
 :host-context(body.light) .modal-nav {
-  background:rgba(216,203,181,0.95);
+  background:rgba(255,255,255,0.96);
 }
 :host-context(body.light) .modal-close {
-  background:rgba(216,203,181,0.95);
+  background:rgba(255,255,255,0.96);
 }
 :host-context(body.light) .modal-box {
   box-shadow:0 0 60px rgba(0,0,0,0.28);
@@ -883,7 +883,7 @@ export class App implements OnInit, OnDestroy, AfterViewInit {
       ctx.clearRect(0, 0, w, h);
       const cols = Math.ceil(w / spacing) + 1;
       const rows = Math.ceil(h / spacing) + 1;
-      const color = isDark() ? '0,255,156' : '0,122,74';
+      const color = isDark() ? '0,255,156' : '15,118,110';
 
       for (let c = 0; c < cols; c++) {
         for (let r = 0; r < rows; r++) {

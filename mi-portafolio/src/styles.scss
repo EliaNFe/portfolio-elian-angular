@@ -49,15 +49,15 @@ body {
 
 body.light {
   color-scheme: light;
-  --bg:     #E3D8C5;
-  --bg2:    #D8CBB5;
-  --bg3:    #CBBBA2;
-  --green:  #3F6B4F;
-  --cyan:   #397078;
-  --text:   #352F28;
-  --muted:  #685E51;
-  --border: #B3A38D;
-  --red:    #A14F55;
+  --bg:     #F4F7F6;
+  --bg2:    #FFFFFF;
+  --bg3:    #E7EFED;
+  --green:  #0F766E;
+  --cyan:   #0369A1;
+  --text:   #172033;
+  --muted:  #52606D;
+  --border: #CBD7D4;
+  --red:    #B4233C;
 }
 
 ::selection { background: var(--green); color: var(--bg); }
