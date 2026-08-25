@@ -21,7 +21,7 @@ import { ProjectService } from './services/project';
         <a href="#sobre-mi"><span class="dim">cat</span> {{ t.navBio }}</a>
         <a href="#contacto"><span class="dim">ping</span> {{ t.navContacto }}</a>
       </div>
-      <a href="/cv/Elian_Ferreyra_CV.pdf" target="_blank" class="nav-cv">.pdf</a>
+      <a href="/cv/Elian_Ferreyra_CV.pdf?v=20260823" target="_blank" class="nav-cv">.pdf</a>
       <button class="lang-toggle" (click)="toggleLang()">{{ isEn ? 'ES' : 'EN' }}</button>
       <button class="theme-toggle" (click)="toggleTheme($event)"
               [attr.aria-label]="isLight ? t.activarOscuro : t.activarClaro"
