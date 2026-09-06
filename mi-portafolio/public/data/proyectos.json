@@ -50,13 +50,13 @@
   {
     "id": 5,
     "titulo": "Ecommerce con Microservicios",
-    "descripcion": "Diseñé un ecommerce distribuido que mantiene coordinados catálogo, órdenes, pagos y stock incluso cuando una operación falla.",
-    "problema": "Separar un proceso de compra entre servicios independientes introduce fallos parciales: un pago rechazado no puede dejar stock reservado ni una orden en un estado incorrecto.",
-    "decision": "Dividí el backend en cuatro microservicios con base de datos por servicio, unifiqué el acceso mediante API Gateway y usé una saga con acciones de compensación.",
-    "impacto": "El flujo puede revertir la reserva de stock cuando el pago falla, manteniendo la consistencia del negocio sin acoplar todos los servicios a una sola base.",
-    "aprendizaje": "Entendí el costo real de una arquitectura distribuida: la independencia de despliegue exige diseñar explícitamente estados, fallos, seguridad y compensaciones.",
+    "descripcion": "Ecommerce full-stack con Spring Boot, Angular y PostgreSQL. Implementé comunicación asíncrona con Apache Kafka entre OrderService y PaymentService mediante una Saga coreografiada que confirma órdenes o compensa el stock ante un pago rechazado.",
+    "problema": "OrderService dependía de una llamada REST directa a PaymentService y esperaba la respuesta del pago. Necesitaba desacoplar ese flujo y mantener la compensación del stock ante rechazos.",
+    "decision": "OrderService crea la orden PENDIENTE, verifica y reserva stock por REST con CatalogService y publica orders.created. PaymentService consume el evento, procesa el pago con idempotencia por orderId y publica payments.approved o payments.rejected.",
+    "impacto": "OrderService consume el resultado: payments.approved cambia la orden a CONFIRMADA; payments.rejected la cambia a RECHAZADA y restaura el stock por REST con CatalogService. Kafka desacopla específicamente el flujo de órdenes y pagos.",
+    "aprendizaje": "Profundicé en Sagas coreografiadas, estados y compensaciones mediante eventos, manteniendo Database per Service, API Gateway, Spring Security con JWT y roles CLIENT / ADMIN, y Resilience4j.",
     "imagen": "imagen/ecommerce-microservicios/foto1.png",
-    "tecnologias": ["Java", "Spring Boot", "Angular", "PostgreSQL", "Docker"],
+    "tecnologias": ["Java 21", "Spring Boot", "Apache Kafka", "Angular", "PostgreSQL", "Docker / Docker Compose", "Spring Security", "Resilience4j"],
     "github": "https://github.com/EliaNFe/microservicio_ecommerce", "carpeta": "ecommerce-microservicios", "totalFotos": 11
   }
 ]
