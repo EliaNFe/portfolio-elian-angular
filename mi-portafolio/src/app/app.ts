@@ -2,909 +2,393 @@ import { Component, OnInit, OnDestroy, AfterViewInit, ChangeDetectorRef, HostLis
 import { CommonModule } from '@angular/common';
 import { ProjectService } from './services/project';
 
-
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [CommonModule],
   template: `
-<div class="site">
+<ng-template #arrow><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></ng-template>
 
-  <!-- ░░ NAV ░░ -->
-  <nav class="nav" [class.scrolled]="scrolled">
-    <span class="nav-brand">
-      <span class="prompt">~/</span><span class="brand-name">elian</span>
-    </span>
-    <div class="nav-right">
-      <div class="nav-links">
-        <a href="#proyectos"><span class="dim">cd</span> {{ t.navProyectos }}</a>
-        <a href="#sobre-mi"><span class="dim">cat</span> {{ t.navBio }}</a>
-        <a href="#contacto"><span class="dim">ping</span> {{ t.navContacto }}</a>
-      </div>
-      <a href="/cv/Elian_Ferreyra_CV.pdf?v=20260823" target="_blank" class="nav-cv">.pdf</a>
-      <button class="lang-toggle" (click)="toggleLang()">{{ isEn ? 'ES' : 'EN' }}</button>
-      <button class="theme-toggle" (click)="toggleTheme($event)"
-              [attr.aria-label]="isLight ? t.activarOscuro : t.activarClaro"
-              [attr.title]="isLight ? t.activarOscuro : t.activarClaro">
-        <span *ngIf="!isLight" class="toggle-icon">◐</span>
-        <span *ngIf="isLight" class="toggle-icon">◑</span>
-      </button>
-    </div>
+<header class="top" [class.scrolled]="scrolled">
+  <a class="mark" href="#inicio"><span class="pr">~/</span>elian</a>
+  <nav class="links" [attr.aria-label]="t.menu">
+    <a href="#sobre-mi">{{ t.navBio }}</a>
+    <a href="#proyectos">{{ t.navProyectos }}</a>
+    <a href="#contacto">{{ t.navContacto }}</a>
   </nav>
-
-  <!-- ░░ HERO — foto de fondo con terminal encima ░░ -->
-  <header class="hero">
-
-    <!-- Fondo con grid animado -->
-    <div class="hero-bg" aria-hidden="true">
-      <canvas class="hero-canvas" #heroCanvas></canvas>
-      <div class="scanlines"></div>
-      <div class="hero-vignette"></div>
-    </div>
-
-    <!-- Terminal flotante -->
-    <div class="terminal-window">
-      <div class="term-bar">
-        <span class="dot red"></span>
-        <span class="dot yellow"></span>
-        <span class="dot green-dot"></span>
-        <span class="term-title">elian@portfolio: ~</span>
-      </div>
-      <div class="term-body">
-        <div class="term-line" *ngFor="let line of termLines; let i = index"
-             [style.opacity]="i < termVisible ? 1 : 0"
-             [style.transition]="'opacity 0.1s ' + (i * 80) + 'ms'">
-          <span class="term-prompt" *ngIf="line.prompt">{{ line.prompt }}</span>
-          <span [class]="line.cls">{{ line.text }}</span>
-        </div>
-        <span class="cursor" [class.blink]="termDone">▋</span>
-      </div>
-    </div>
-
-    <!-- Nombre grande -->
-    <div class="hero-name-block">
-      <p class="hero-label">// Fullstack Developer — Argentina</p>
-      <h1 class="hero-name" (mouseenter)="glitchOn = true" (mouseleave)="glitchOn = false"
-          [class.glitch]="glitchOn" [attr.data-text]="'Elian Ferreyra'">
-        Elian Ferreyra
-      </h1>
-      <p class="hero-sub">
-        <span class="green">Java</span> {{ t.heroCore }}&nbsp;
-        <span class="cyan">Angular</span> {{ t.heroInterface }}
-      </p>
-    </div>
-
-    <div class="hero-scroll">
-      <div class="scroll-track"><div class="scroll-thumb"></div></div>
-      <span>scroll</span>
-    </div>
-  </header>
-
-  <!-- ░░ BIO ░░ -->
-  <section id="sobre-mi" class="section">
-    <div class="section-head">
-      <span class="sec-num green">01</span>
-      <span class="sec-sep">//</span>
-      <span class="sec-title">sobre_mi.json</span>
-    </div>
-
-    <div class="bio-layout">
-      <div class="bio-photo-wrap">
-        <img src="imagen/perfil.png" alt="Elian Ferreyra" class="bio-photo">
-        <div class="bio-photo-badge">
-          <span class="green">●</span> {{ t.available }}
-        </div>
-      </div>
-      <div class="bio-code-block">
-        <pre class="code-preview"><span class="kw">const</span> <span class="var">dev</span> <span class="op">=</span> &#123;
-  <span class="key">{{ t.codeNombre }}</span><span class="op">:</span> <span class="str">"Elian Ferreyra"</span>,
-  <span class="key">{{ t.codeRol }}</span><span class="op">:</span> <span class="str">"Fullstack Developer"</span>,
-  <span class="key">{{ t.codeBase }}</span><span class="op">:</span> <span class="str">"Argentina 🇦🇷"</span>,
-  <span class="key">stack</span><span class="op">:</span> [
-    <span class="str">"Java 17+"</span>, <span class="str">"Spring Boot"</span>,
-    <span class="str">"Angular 18+"</span>, <span class="str">"TypeScript"</span>,
-    <span class="str">"Next.js"</span>, <span class="str">"Supabase"</span>,
-    <span class="str">"PostgreSQL"</span>, <span class="str">"Docker"</span>
-  ],
-  <span class="key">{{ t.codeFoco }}</span><span class="op">:</span> <span class="str">"{{ t.codesFocoVal }}"</span>
-&#125;</pre>
-      </div>
-
-      <div class="bio-text">
-        <p>{{ t.bioText }}</p>
-        <div class="skill-cards">
-          <div class="skill-card">
-            <span class="skill-tag backend">BACKEND</span>
-            <p>Java 17+, Spring Boot, Hibernate/JPA, PostgreSQL, REST APIs, Node.js, Supabase.</p>
-          </div>
-          <div class="skill-card">
-            <span class="skill-tag frontend">FRONTEND</span>
-            <p>Angular 18+, Next.js, TypeScript, Tailwind CSS.</p>
-          </div>
-          <div class="skill-card">
-            <span class="skill-tag tools">TOOLS</span>
-            <p>Git, GitHub, Docker, Maven, Postman, Vercel.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ░░ PROYECTOS ░░ -->
-  <section id="proyectos" class="section">
-    <div class="section-head">
-      <span class="sec-num cyan">02</span>
-      <span class="sec-sep">//</span>
-      <span class="sec-title">ls ~/proyectos</span>
-    </div>
-
-    <ng-container *ngIf="proyectos.length > 0; else loading">
-      <div class="projects-grid">
-        <article class="project-card" *ngFor="let p of proyectos; let i = index"
-                 (click)="openModal(p)">
-          <div class="proj-img-wrap">
-            <img [src]="p.imagenSeleccionada || p.imagen" [alt]="p.titulo" class="proj-img">
-            <div class="proj-img-overlay">
-              <span class="proj-open-hint">▶ {{ t.verGaleria }}</span>
-            </div>
-            <div class="proj-scanlines"></div>
-            <div class="proj-thumbs" (click)="$event.stopPropagation()">
-              <img *ngFor="let img of p.galeria?.slice(0,4)"
-                   [src]="img" class="proj-thumb"
-                   (mouseenter)="p.imagenSeleccionada = img"
-                   (click)="openModal(p, img)">
-            </div>
-          </div>
-          <div class="proj-info">
-            <div class="proj-path">
-              <span class="green">~/proyectos/</span><span class="proj-slug">{{ slug(p.titulo) }}</span>
-            </div>
-            <h3 class="proj-title">{{ p.titulo }}</h3>
-            <p class="proj-desc">{{ p.descripcion }}</p>
-            <dl class="proj-story">
-              <div class="story-item"><dt>{{ t.problema }}</dt><dd>{{ p.problema }}</dd></div>
-              <div class="story-item"><dt>{{ t.decision }}</dt><dd>{{ p.decision }}</dd></div>
-              <div class="story-item"><dt>{{ t.impacto }}</dt><dd>{{ p.impacto }}</dd></div>
-              <div class="story-item"><dt>{{ t.aprendizaje }}</dt><dd>{{ p.aprendizaje }}</dd></div>
-            </dl>
-            <div class="proj-tech-row">
-              <span class="tech-pill" *ngFor="let t2 of p.tecnologias">{{ t2 }}</span>
-            </div>
-            <div class="proj-actions" (click)="$event.stopPropagation()">
-              <a [href]="p.github" target="_blank" class="btn-ghost">
-                <span>&#123; &#125;</span> GitHub
-              </a>
-              <a *ngIf="p.demo" [href]="p.demo" target="_blank" class="btn-solid">
-                ▶ Demo
-              </a>
-            </div>
-          </div>
-        </article>
-      </div>
-    </ng-container>
-
-    <ng-template #loading>
-      <div class="loading-bar"><div class="loading-progress"></div></div>
-      <p class="loading-text">{{ t.loading }}</p>
-    </ng-template>
-  </section>
-
-  <!-- ░░ CONTACTO ░░ -->
-  <section id="contacto" class="section">
-    <div class="section-head">
-      <span class="sec-num green">03</span>
-      <span class="sec-sep">//</span>
-      <span class="sec-title">contacto.sh</span>
-    </div>
-
-    <div class="contact-layout">
-      <div class="contact-big">
-        <h2 class="contact-h2">{{ t.contactH2a }}<br><em>{{ t.contactH2b }}</em></h2>
-        <p class="contact-sub">{{ t.contactSub }}</p>
-      </div>
-
-      <div class="contact-list">
-        <a href="mailto:elianferre@hotmail.com.ar" class="contact-row">
-          <span class="contact-cmd"><span class="green">$</span> mail</span>
-          <span class="contact-val">elianferre@hotmail.com.ar</span>
-          <span class="contact-arrow">↗</span>
-        </a>
-        <a href="https://linkedin.com/in/elian-ferreyra" target="_blank" class="contact-row">
-          <span class="contact-cmd"><span class="green">$</span> open</span>
-          <span class="contact-val">LinkedIn</span>
-          <span class="contact-arrow">↗</span>
-        </a>
-        <a href="https://wa.me/5492262580172" target="_blank" class="contact-row">
-          <span class="contact-cmd"><span class="green">$</span> send</span>
-          <span class="contact-val">WhatsApp</span>
-          <span class="contact-arrow">↗</span>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ░░ FOOTER ░░ -->
-  <footer class="footer">
-    <span class="green">▶</span>
-    <span>Elian Ferreyra</span>
-    <span class="muted">·</span>
-    <span class="muted">Argentina</span>
-    <span class="muted">·</span>
-    <span class="muted">2026</span>
-    <span class="footer-right muted">{{ t.footerMade }}</span>
-  </footer>
-
-  <!-- ░░ MODAL ░░ -->
-  <div *ngIf="proyectoActivo"
-       class="modal-overlay"
-       (click)="closeModal()">
-    <button class="modal-close" (click)="closeModal()">✕</button>
-    <button class="modal-nav left" (click)="prevFoto($event)">←</button>
-    <button class="modal-nav right" (click)="nextFoto($event)">→</button>
-
-    <div class="modal-box" (click)="$event.stopPropagation()">
-      <div class="modal-term-bar">
-        <span class="dot red"></span><span class="dot yellow"></span><span class="dot green-dot"></span>
-        <span class="modal-path"><span class="green">~/proyectos/</span>{{ slug(proyectoActivo.titulo) }}/gallery</span>
-      </div>
-      <img [src]="proyectoActivo.galeria[indexFoto]"
-           class="modal-img" [alt]="proyectoActivo.titulo">
-      <div class="modal-footer-bar">
-        <span class="modal-title-txt">{{ proyectoActivo.titulo }}</span>
-        <span class="modal-counter muted">{{ indexFoto + 1 }}/{{ proyectoActivo.galeria.length }}</span>
-      </div>
-    </div>
+  <div class="tools">
+    <a class="cv" href="/cv/Elian_Ferreyra_CV.pdf?v=20260823" target="_blank">{{ t.cv }}</a>
+    <button class="lang-toggle" (click)="toggleLang()" [attr.aria-label]="t.idioma">{{ isEn ? 'ES' : 'EN' }}</button>
+    <button class="theme-toggle" (click)="toggleTheme($event)"
+            [attr.aria-label]="isLight ? t.activarOscuro : t.activarClaro"
+            [attr.title]="isLight ? t.activarOscuro : t.activarClaro">
+      <svg class="ico" viewBox="0 0 24 24" [class.flip]="isLight" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor"/></svg>
+    </button>
   </div>
+</header>
 
+<main id="inicio">
+  <section class="hero">
+    <div class="hero-text">
+      <h1><span class="rv r1">Elian</span><span class="rv r2"><em>Ferreyra</em></span></h1>
+      <div class="who rv r3"><img class="avatar" src="imagen/perfil.png" alt="Elian Ferreyra"><div><p class="role">{{ t.role }}</p><p class="avail"><i class="dot"></i>{{ t.available }}</p></div></div>
+      <p class="tagline rv r4"><b>Java</b> {{ t.heroCore }} <b>Angular</b> {{ t.heroInterface }}</p>
+    </div>
+    <div class="term rv r4" aria-hidden="true">
+      <div class="term-bar"><i></i><i></i><i></i><span>elian@portfolio: ~</span></div>
+      <div class="term-body">
+        <div class="tl" *ngFor="let l of termLines; let i = index" [style.opacity]="i < termVisible ? 1 : 0">
+          <span class="tp" *ngIf="l.prompt">{{ l.prompt }}</span><span [class]="l.cls">{{ l.key ? t[l.key] : l.text }}</span>
+        </div>
+        <span class="cur" [class.blink]="termDone">▋</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="marquee" aria-hidden="true"><div class="track"><span *ngFor="let w of stackList.concat(stackList)"><i class="ic" [style.--ic]="'url(' + w.i + ')'"></i>{{ w.n }}</span></div></div>
+
+  <section id="sobre-mi" class="block">
+    <h2>{{ t.tituloBio }}</h2>
+    <div class="about">
+      <p class="lead">{{ t.bioText }}</p>
+      <dl class="stack"><div *ngFor="let g of stackGroups"><dt>{{ t[g.k] }}</dt><dd><span *ngFor="let i of g.items">{{ i }}</span></dd></div></dl>
+    </div>
+  </section>
+
+  <section id="proyectos" class="block">
+    <h2>{{ t.tituloProy }}</h2>
+    <ng-container *ngIf="proyectos.length > 0; else loading">
+      <article class="proj" *ngFor="let p of proyectos">
+        <div class="proj-media">
+          <button class="shot" (click)="openModal(p)" [attr.aria-label]="t.verGaleria + ': ' + p.titulo">
+            <img [src]="p.imagenSeleccionada || p.imagen" [alt]="p.titulo">
+            <span class="shot-hint">{{ t.verGaleria }}</span>
+          </button>
+          <div class="thumbs">
+            <img *ngFor="let img of p.galeria?.slice(0,4)" [src]="img" alt=""
+                 (mouseenter)="p.imagenSeleccionada = img" (click)="openModal(p, img)">
+          </div>
+          <p class="path"><span>~/proyectos/</span>{{ slug(p.titulo) }}</p>
+        </div>
+        <div class="proj-body">
+          <h3>{{ p.titulo }}</h3>
+          <p class="desc">{{ tx(p, 'descripcion') }}</p>
+          <dl class="story">
+            <div><dt>{{ t.problema }}</dt><dd>{{ tx(p, 'problema') }}</dd></div>
+            <div><dt>{{ t.decision }}</dt><dd>{{ tx(p, 'decision') }}</dd></div>
+            <div><dt>{{ t.impacto }}</dt><dd>{{ tx(p, 'impacto') }}</dd></div>
+            <div><dt>{{ t.aprendizaje }}</dt><dd>{{ tx(p, 'aprendizaje') }}</dd></div>
+          </dl>
+          <ul class="tech"><li *ngFor="let t2 of p.tecnologias">{{ t2 }}</li></ul>
+          <div class="acts">
+            <a [href]="p.github" target="_blank" class="btn ghost">GitHub <ng-container *ngTemplateOutlet="arrow"></ng-container></a>
+            <a *ngIf="p.demo" [href]="p.demo" target="_blank" class="btn solid">Demo <ng-container *ngTemplateOutlet="arrow"></ng-container></a>
+          </div>
+        </div>
+      </article>
+    </ng-container>
+    <ng-template #loading><p class="loading">{{ t.loading }}</p></ng-template>
+  </section>
+
+  <section id="contacto" class="block contact">
+    <h2 class="big">{{ t.contactH2a }} <em>{{ t.contactH2b }}</em></h2>
+    <p class="lead">{{ t.contactSub }}</p>
+    <div class="rows">
+      <a href="mailto:elianferre@hotmail.com.ar"><span>{{ t.mail }}</span><b>elianferre@hotmail.com.ar</b><ng-container *ngTemplateOutlet="arrow"></ng-container></a>
+      <a href="https://linkedin.com/in/elian-ferreyra" target="_blank"><span>LinkedIn</span><b>/in/elian-ferreyra</b><ng-container *ngTemplateOutlet="arrow"></ng-container></a>
+      <a href="https://wa.me/5492262580172" target="_blank"><span>WhatsApp</span><b>+54 9 2262 58-0172</b><ng-container *ngTemplateOutlet="arrow"></ng-container></a>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <span>Elian Ferreyra · Argentina · 2026</span>
+  <span>{{ t.footerMade }}</span>
+</footer>
+
+<div *ngIf="proyectoActivo" class="modal" (click)="closeModal()">
+  <button class="mbtn close" (click)="closeModal()" [attr.aria-label]="t.cerrar"><svg class="ico" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  <button class="mbtn prev" (click)="prevFoto($event)" [attr.aria-label]="t.anterior"><svg class="ico" viewBox="0 0 24 24" style="transform:scaleX(-1)"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+  <button class="mbtn next" (click)="nextFoto($event)" [attr.aria-label]="t.siguiente"><svg class="ico" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+  <figure class="mbox" (click)="$event.stopPropagation()">
+    <div class="mbar"><i></i><i></i><i></i><span>~/proyectos/{{ slug(proyectoActivo.titulo) }}/gallery</span></div>
+    <img [src]="proyectoActivo.galeria[indexFoto]" [alt]="proyectoActivo.titulo">
+    <figcaption><span>{{ proyectoActivo.titulo }}</span><span>{{ indexFoto + 1 }} / {{ proyectoActivo.galeria.length }}</span></figcaption>
+  </figure>
 </div>
   `,
   styles: [`
-/* ── SITE ─────────────────────────────────────── */
-.site { min-height: 100vh; background: var(--bg); color: var(--text); }
+:host { display:block; }
+.ico { width:1.1em; height:1.1em; fill:none; stroke:currentColor; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; flex:none; transition:transform .4s cubic-bezier(.16,1,.3,1); }
+a:focus-visible, button:focus-visible { outline:2px solid var(--accent); outline-offset:3px; border-radius:4px; }
+h1, h2, h3, .big, .lead, .mark, .track span { font-family:'Fraunces', Georgia, serif; font-optical-sizing:auto; font-weight:380; text-wrap:balance; }
+em { font-style:italic; }
 
-/* ── NAV ──────────────────────────────────────── */
-.nav {
-  position: fixed; top:0; left:0; right:0; z-index:50;
-  display:flex; justify-content:space-between; align-items:center;
-  padding: 1rem 2.5rem;
-  border-bottom: 1px solid transparent;
-  transition: background 0.3s, border-color 0.3s, backdrop-filter 0.3s;
-  font-family: 'JetBrains Mono', monospace;
-}
-.nav.scrolled {
-  background: rgba(10,10,10,0.85);
-  backdrop-filter: blur(12px);
-  border-color: var(--border);
-}
-.nav-brand { font-size: 0.9rem; letter-spacing:0.05em; }
-.prompt { color: var(--green); }
-.brand-name { color: var(--text); }
-.nav-right { display:flex; align-items:center; gap:1.5rem; }
-.nav-links { display:flex; gap:2rem; font-size:0.72rem; color:var(--muted); }
-.nav-links a { transition:color 0.2s; }
-.nav-links a:hover { color:var(--green); }
-.nav-links .dim { color:var(--green); opacity:0.6; margin-right:0.3rem; }
-.nav-cv {
-  font-size:0.7rem; letter-spacing:0.1em;
-  border:1px solid var(--border); padding:0.35rem 0.8rem;
-  color:var(--muted); transition:border-color 0.2s, color 0.2s;
-}
-.nav-cv:hover { border-color:var(--cyan); color:var(--cyan); }
-.theme-toggle {
-  background:none; border:1px solid var(--border);
-  color:var(--muted); cursor:pointer;
-  width:2rem; height:2rem;
-  display:flex; align-items:center; justify-content:center;
-  font-size:1rem; transition:border-color 0.2s, color 0.2s;
-}
-.theme-toggle:hover { border-color:var(--green); color:var(--green); }
-.lang-toggle {
-  background:none; border:1px solid var(--border);
-  color:var(--muted); cursor:pointer;
-  padding:0 0.65rem; height:2rem;
-  font-family:'JetBrains Mono', monospace;
-  font-size:0.65rem; letter-spacing:0.1em;
-  transition:border-color 0.2s, color 0.2s;
-}
-.lang-toggle:hover { border-color:var(--cyan); color:var(--cyan); }
+.top { position:sticky; top:0; z-index:50; display:flex; align-items:center; justify-content:space-between; gap:1.5rem; padding:1rem clamp(1.2rem,4vw,3rem); background:color-mix(in srgb, var(--bg) 85%, transparent); backdrop-filter:blur(10px); border-bottom:1px solid transparent; transition:border-color .3s; }
+.top.scrolled { border-color:var(--border); }
+.mark { font-size:1.4rem; font-style:italic; }
+.links { display:flex; gap:2rem; font-size:.95rem; }
+.links a { color:var(--muted); background:linear-gradient(var(--accent),var(--accent)) 0 100%/0 1px no-repeat; padding-bottom:3px; transition:color .2s, background-size .35s cubic-bezier(.16,1,.3,1); }
+.links a:hover { color:var(--text); background-size:100% 1px; }
+.tools { display:flex; align-items:center; gap:.7rem; font-size:.9rem; }
+.cv { padding:.45rem 1rem; border-radius:99px; background:var(--accent); color:var(--accent-ink); font-weight:500; transition:transform .25s; } .cv:hover { transform:translateY(-2px); }
+.lang-toggle, .theme-toggle { background:none; border:1px solid var(--border); color:var(--text); height:2.2rem; min-width:2.2rem; padding:0 .6rem; border-radius:99px; cursor:pointer; display:grid; place-items:center; font:inherit; font-size:.8rem; letter-spacing:.06em; transition:border-color .2s; }
+.lang-toggle:hover, .theme-toggle:hover { border-color:var(--accent); }
+.theme-toggle .flip { transform:rotate(180deg); }
 
-/* ── HERO ─────────────────────────────────────── */
-.hero {
-  position:relative; min-height:100vh;
-  display:flex; flex-direction:column;
-  justify-content:center; align-items:flex-start;
-  padding: 6rem 2.5rem 3rem;
-  overflow:hidden;
-  gap: 3rem;
-}
-/* Fondo hero */
-.hero-bg {
-  position:absolute; inset:0; z-index:0;
-  background: var(--bg);
-}
-.hero-canvas {
-  position:absolute; inset:0;
-  width:100%; height:100%;
-}
-.hero-vignette {
-  position:absolute; inset:0;
-  background: radial-gradient(ellipse at center, transparent 30%, var(--bg) 80%);
-  pointer-events:none;
-}
-.scanlines {
-  position:absolute; inset:0; z-index:1; pointer-events:none;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 2px,
-    rgba(0,255,156,0.015) 2px,
-    rgba(0,255,156,0.015) 4px
-  );
-  animation: scanMove 8s linear infinite;
-}
-@keyframes scanMove {
-  from { background-position: 0 0; }
-  to   { background-position: 0 100px; }
-}
+main { max-width:1180px; margin:0 auto; padding:0 clamp(1.2rem,4vw,3rem); }
 
-/* Terminal flotante */
-.terminal-window {
-  position:relative; z-index:2;
-  background: rgba(17,17,17,0.92);
-  border:1px solid var(--border);
-  border-radius:8px;
-  width: min(480px, 100%);
-  box-shadow: 0 0 40px rgba(0,255,156,0.08), 0 20px 60px rgba(0,0,0,0.6);
-  font-family:'JetBrains Mono', monospace;
-  font-size:0.78rem;
-  backdrop-filter: blur(4px);
-}
-.term-bar {
-  display:flex; align-items:center; gap:0.5rem;
-  padding:0.65rem 1rem;
-  border-bottom:1px solid var(--border);
-  background: var(--bg3);
-  border-radius:8px 8px 0 0;
-}
-.dot { width:12px; height:12px; border-radius:50%; }
-.red { background:#FF5F57; }
-.yellow { background:#FFBD2E; }
-.green-dot { background:#28C840; }
-.term-title { margin-left:0.5rem; color:var(--muted); font-size:0.7rem; }
-.term-body { padding:1.2rem 1.2rem 1rem; line-height:2; min-height:10rem; }
-.term-line { display:flex; gap:0.5rem; transition:opacity 0.1s; }
-.term-prompt { color:var(--green); user-select:none; white-space:nowrap; }
-.t-cmd  { color:var(--cyan); }
-.t-out  { color:var(--text); }
-.t-muted{ color:var(--muted); }
-.t-ok   { color:var(--green); }
-.t-err  { color:var(--red); }
-.cursor { color:var(--green); font-size:1rem; }
-.cursor.blink { animation: blink 1s step-end infinite; }
-@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+.hero { position:relative; display:grid; grid-template-columns:1fr minmax(260px,380px); gap:clamp(2rem,6vw,6rem); align-items:center; padding:clamp(3rem,8vw,6rem) 0 clamp(3rem,6vw,5rem); }
+.hero::before { content:''; position:absolute; right:-12%; top:-5%; width:70%; aspect-ratio:1; background:radial-gradient(closest-side, color-mix(in srgb, var(--accent) 24%, transparent), transparent); pointer-events:none; }
+h1 { position:relative; font-size:clamp(3.8rem,12vw,6rem); line-height:.9; letter-spacing:-.035em; display:flex; flex-direction:column; font-variation-settings:'opsz' 144; }
+h1 em { color:var(--accent); font-weight:300; padding-left:.6em; }
+.role { margin-top:2rem; color:var(--muted); letter-spacing:.04em; }
+.tagline { margin-top:.8rem; font-size:1.3rem; max-width:30ch; line-height:1.4; } .tagline b { font-weight:500; color:var(--accent); }
+.hero-photo { position:relative; margin:0; }
+.hero-photo::before { content:''; position:absolute; inset:0; transform:translate(1.1rem,1.1rem) rotate(2.5deg); border:1px solid var(--accent); border-radius:999px 999px 18px 18px; transition:transform .6s cubic-bezier(.16,1,.3,1); }
+.hero-photo:hover::before { transform:translate(.5rem,.5rem) rotate(.8deg); }
+.frame { position:relative; aspect-ratio:4/5; border-radius:999px 999px 18px 18px; overflow:hidden; background:var(--bg2); box-shadow:0 30px 60px -25px rgba(0,0,0,.55), 0 8px 16px -8px rgba(0,0,0,.3); }
+.frame img { width:100%; height:100%; object-fit:cover; object-position:50% 20%; filter:grayscale(1) contrast(1.08) brightness(1.02); transform:scale(1.04); transition:filter .8s, transform 1.2s cubic-bezier(.16,1,.3,1); }
+.frame::after { content:''; position:absolute; inset:0; background:linear-gradient(160deg, var(--accent), color-mix(in srgb, var(--accent) 40%, var(--bg))); mix-blend-mode:multiply; opacity:.55; transition:opacity .8s; pointer-events:none; }
+.hero-photo:hover .frame img { filter:none; transform:scale(1); }
+.hero-photo:hover .frame::after { opacity:0; }
+.hero-photo figcaption { position:absolute; left:-1rem; bottom:2.2rem; z-index:2; display:flex; align-items:center; gap:.6rem; padding:.55rem 1.1rem; border-radius:99px; background:var(--bg); color:var(--text); font-size:.88rem; font-weight:500; box-shadow:0 12px 28px -10px rgba(0,0,0,.45); }
+.dot { width:.55rem; height:.55rem; border-radius:50%; background:#5BD18B; box-shadow:0 0 0 4px color-mix(in srgb, #5BD18B 25%, transparent); }
+.rv { animation:rise 1s cubic-bezier(.16,1,.3,1) backwards; display:block; }
+.r1{animation-delay:.05s}.r2{animation-delay:.18s}.r3{animation-delay:.32s}.r4{animation-delay:.45s}
+@keyframes rise { from { opacity:0; transform:translateY(1.6rem); } }
 
-/* Nombre hero */
-.hero-name-block {
-  position:relative; z-index:2;
-}
-.hero-label {
-  font-family:'JetBrains Mono', monospace;
-  font-size:0.72rem; color:var(--muted); margin-bottom:0.8rem;
-  letter-spacing:0.05em;
-}
-.hero-name {
-  font-family:'Space Grotesk', sans-serif;
-  font-size: clamp(3.5rem, 8vw, 7rem);
-  font-weight:700; line-height:1;
-  letter-spacing:-0.03em;
-  color:var(--text);
-  cursor:default;
-  position:relative;
-  display:inline-block;
-}
-/* Glitch */
-.hero-name.glitch { animation: glitch 0.4s steps(2) infinite; }
-.hero-name.glitch::before,
-.hero-name.glitch::after {
-  content: attr(data-text);
-  position:absolute; top:0; left:0;
-  width:100%; height:100%;
-  background: transparent;
-}
-.hero-name.glitch::before {
-  color:var(--cyan);
-  clip-path: polygon(0 30%, 100% 30%, 100% 50%, 0 50%);
-  transform: translateX(-3px);
-  animation: glitch-clip1 0.4s steps(2) infinite;
-}
-.hero-name.glitch::after {
-  color:var(--green);
-  clip-path: polygon(0 60%, 100% 60%, 100% 80%, 0 80%);
-  transform: translateX(3px);
-  animation: glitch-clip2 0.4s steps(2) infinite;
-}
-@keyframes glitch       { 0%,100%{transform:translate(0)} 33%{transform:translate(-2px,1px)} 66%{transform:translate(2px,-1px)} }
-@keyframes glitch-clip1 { 0%,100%{clip-path:polygon(0 30%,100% 30%,100% 50%,0 50%)} 50%{clip-path:polygon(0 15%,100% 15%,100% 40%,0 40%)} }
-@keyframes glitch-clip2 { 0%,100%{clip-path:polygon(0 60%,100% 60%,100% 80%,0 80%)} 50%{clip-path:polygon(0 70%,100% 70%,100% 90%,0 90%)} }
+.marquee { overflow:hidden; border-block:1px solid var(--border); padding:1.1rem 0; mask-image:linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent); }
+.track { display:flex; width:max-content; animation:slide 45s linear infinite; }
+.track span { font-size:clamp(1.6rem,3.4vw,2.6rem); font-style:italic; color:var(--muted); white-space:nowrap; display:flex; align-items:center; }
+.track span::after { content:''; width:.4rem; height:.4rem; margin:0 1.6rem; border-radius:50%; background:var(--accent); }
+@keyframes slide { to { transform:translateX(-50%); } }
 
-.hero-sub {
-  font-size:1.05rem; font-weight:300;
-  color:var(--muted); margin-top:1.2rem;
-  letter-spacing:0.02em;
-}
-.green { color:var(--green); }
-.cyan  { color:var(--cyan); }
-.muted { color:var(--muted); }
+.block { padding:clamp(3.5rem,8vw,6.5rem) 0; }
+.block > h2 { font-size:clamp(2.4rem,5vw,4rem); letter-spacing:-.025em; margin-bottom:3rem; }
+.about { display:grid; grid-template-columns:1.2fr 1fr; gap:clamp(2rem,6vw,5rem); }
+.lead { font-size:clamp(1.5rem,2.8vw,2.1rem); line-height:1.3; max-width:32ch; }
+.stack div { padding:1.1rem 0; border-bottom:1px solid var(--border); display:grid; grid-template-columns:7rem 1fr; gap:1rem; } .stack div:first-child { padding-top:0; }
+dt { color:var(--accent); font-size:.78rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; padding-top:.25rem; }
+dd { line-height:1.6; }
 
-.hero-scroll {
-  position:absolute; bottom:2.5rem; left:2.5rem; z-index:2;
-  display:flex; align-items:center; gap:0.8rem;
-  font-family:'JetBrains Mono', monospace;
-  font-size:0.6rem; color:var(--muted); letter-spacing:0.2em;
+.proj { display:grid; grid-template-columns:1.1fr 1fr; gap:clamp(1.5rem,4vw,4.5rem); padding:3rem 0; align-items:center; }
+.proj:nth-of-type(even) .proj-media { order:2; }
+.shot { position:relative; display:block; width:100%; padding:0; border:0; background:var(--bg2); cursor:zoom-in; overflow:hidden; border-radius:16px; box-shadow:0 30px 60px -28px rgba(0,0,0,.6), 0 8px 18px -10px rgba(0,0,0,.35); transition:transform .6s cubic-bezier(.16,1,.3,1); }
+.shot:hover { transform:translateY(-6px) rotate(-.5deg); }
+.shot img { width:100%; aspect-ratio:16/10; object-fit:cover; transition:transform .9s cubic-bezier(.16,1,.3,1); } .shot:hover img { transform:scale(1.04); }
+.shot-hint { position:absolute; left:1rem; bottom:1rem; background:var(--accent); color:var(--accent-ink); padding:.4rem .9rem; border-radius:99px; font-size:.82rem; font-weight:500; opacity:0; transform:translateY(.5rem); transition:.35s; }
+.shot:hover .shot-hint, .shot:focus-visible .shot-hint { opacity:1; transform:none; }
+.thumbs { display:grid; grid-template-columns:repeat(4,1fr); gap:.6rem; margin-top:.8rem; }
+.thumbs img { width:100%; aspect-ratio:16/10; object-fit:cover; cursor:pointer; border-radius:8px; opacity:.55; transition:opacity .25s, transform .3s; } .thumbs img:hover { opacity:1; transform:translateY(-2px); }
+.proj-body h3 { font-size:clamp(2rem,3.6vw,3rem); line-height:1.02; letter-spacing:-.02em; }
+.desc { margin-top:1rem; color:var(--muted); line-height:1.65; max-width:58ch; }
+.story { margin-top:1.6rem; display:grid; grid-template-columns:1fr 1fr; gap:1.2rem 1.6rem; } .story dd { font-size:.93rem; margin-top:.3rem; }
+.tech { list-style:none; display:flex; flex-wrap:wrap; gap:.5rem; margin-top:1.6rem; }
+.tech li { font-size:.82rem; padding:.3rem .8rem; border-radius:99px; border:1px solid var(--border); background:var(--bg2); }
+.acts { display:flex; gap:.8rem; margin-top:1.6rem; }
+.btn { display:inline-flex; align-items:center; gap:.5rem; padding:.7rem 1.3rem; border-radius:99px; font-size:.92rem; font-weight:500; border:1px solid var(--border); transition:transform .25s, border-color .2s, background .2s, color .2s; }
+.btn:hover { transform:translateY(-2px); } .btn:hover .ico { transform:translateX(3px); }
+.btn.ghost:hover { border-color:var(--accent); }
+.btn.solid { background:var(--accent); border-color:var(--accent); color:var(--accent-ink); }
+.loading { color:var(--muted); }
+
+.big { font-size:clamp(3rem,9vw,6rem); line-height:.95; letter-spacing:-.035em; margin-bottom:1.5rem !important; } .big em { color:var(--accent); font-weight:300; }
+.contact .lead { font-size:1.3rem; margin-bottom:3rem; }
+.rows a { display:grid; grid-template-columns:8rem 1fr auto; gap:1rem; align-items:center; padding:1.5rem 0; border-top:1px solid var(--border); transition:padding .4s cubic-bezier(.16,1,.3,1), color .2s; }
+.rows a:last-child { border-bottom:1px solid var(--border); }
+.rows a:hover { padding-left:1rem; color:var(--accent); } .rows a:hover .ico { transform:rotate(-45deg); }
+.rows span { color:var(--muted); font-size:.9rem; } .rows b { font-weight:400; font-size:clamp(1.1rem,2.4vw,1.7rem); overflow-wrap:anywhere; }
+.foot { display:flex; justify-content:space-between; flex-wrap:wrap; gap:.5rem; max-width:1180px; margin:0 auto; padding:2rem clamp(1.2rem,4vw,3rem); color:var(--muted); font-size:.85rem; }
+
+.modal { position:fixed; inset:0; z-index:100; background:color-mix(in srgb, var(--bg) 94%, transparent); backdrop-filter:blur(8px); display:grid; place-items:center; padding:4rem 1rem; animation:rise .3s ease backwards; }
+.mbox { margin:0; max-width:min(1100px,92vw); } .mbox img { max-width:100%; max-height:76vh; margin:0 auto; border-radius:12px; box-shadow:0 30px 70px -20px rgba(0,0,0,.6); }
+.mbox figcaption { display:flex; justify-content:space-between; gap:1rem; margin-top:1rem; font-size:.9rem; color:var(--muted); }
+.mbtn { position:absolute; width:2.8rem; height:2.8rem; border-radius:50%; border:1px solid var(--border); background:var(--bg2); color:var(--text); cursor:pointer; display:grid; place-items:center; transition:border-color .2s; } .mbtn:hover { border-color:var(--accent); }
+.close { top:1rem; right:1rem; } .prev { left:1rem; top:50%; } .next { right:1rem; top:50%; }
+
+@supports (animation-timeline: view()) {
+  .proj, .block > h2, .rows a, .stack div { animation:rise linear both; animation-timeline:view(); animation-range:entry 0% entry 40%; }
 }
-.scroll-track {
-  width:40px; height:2px; background:var(--border); overflow:hidden;
+@media (max-width:820px) {
+  .links { display:none; }
+  .hero, .about, .proj { grid-template-columns:1fr; }
+  .hero-photo { max-width:300px; order:-1; margin-left:1rem; }
+  .proj:nth-of-type(even) .proj-media { order:0; }
+  .story { grid-template-columns:1fr; }
+  .rows a { grid-template-columns:1fr auto; } .rows span { grid-column:1 / -1; }
 }
-.scroll-thumb {
-  height:100%; width:40%;
-  background:var(--green);
-  animation: scrollAnim 2s ease-in-out infinite;
-}
-@keyframes scrollAnim {
-  0%   { transform:translateX(-100%); }
-  100% { transform:translateX(300%); }
+@media (prefers-reduced-motion:reduce) { .rv, .modal, .track { animation:none; } * { transition-duration:.01ms !important; } }
+
+.pr { font-family:'JetBrains Mono',monospace; font-size:.75em; font-style:normal; color:var(--accent); }
+.hero-bg { position:absolute; inset:0; pointer-events:none; z-index:0; mask-image:radial-gradient(ellipse at 62% 40%, #000 18%, transparent 72%); }
+.hero-canvas { width:100%; height:100%; display:block; }
+.hero-text, .hero-photo { position:relative; z-index:1; }
+.term { margin-top:2rem; max-width:30rem; border:1px solid var(--border); border-radius:12px; background:color-mix(in srgb, var(--bg2) 92%, transparent); font:.82rem/1.7 'JetBrains Mono',monospace; box-shadow:0 20px 40px -24px rgba(0,0,0,.55); overflow:hidden; }
+.term-bar, .mbar { display:flex; align-items:center; gap:.4rem; padding:.55rem .9rem; border-bottom:1px solid var(--border); color:var(--muted); font:.75rem 'JetBrains Mono',monospace; }
+.term-bar i, .mbar i { width:.6rem; height:.6rem; border-radius:50%; background:#D9674F; }
+.term-bar i:nth-child(2), .mbar i:nth-child(2) { background:#D9B24F; } .term-bar i:nth-child(3), .mbar i:nth-child(3) { background:#7FB27F; }
+.term-bar span, .mbar span { margin-left:.6rem; }
+.term-body { padding:.8rem 1rem 1rem; min-height:11rem; }
+.tl { transition:opacity .25s; } .tp { color:var(--muted); margin-right:.6rem; }
+.t-cmd { color:var(--text); font-weight:500; } .t-out { color:var(--muted); } .t-ok { color:var(--sage); }
+.cur { color:var(--accent); } .cur.blink { animation:blink 1s steps(1) infinite; } @keyframes blink { 50% { opacity:0; } }
+.code { margin-top:2.2rem; padding:1.4rem 1.6rem; background:var(--bg2); border:1px solid var(--border); border-radius:14px; font:.86rem/1.8 'JetBrains Mono',monospace; overflow-x:auto; box-shadow:0 24px 50px -30px rgba(0,0,0,.5); }
+.code .kw { color:var(--accent); } .code .key { color:var(--text); } .code .str { color:var(--sage); } .code .op { color:var(--muted); }
+.path { margin-top:.9rem; font:.78rem 'JetBrains Mono',monospace; color:var(--muted); } .path span { color:var(--accent); }
+.mbar { background:var(--bg2); border:1px solid var(--border); border-bottom:0; border-radius:12px 12px 0 0; } .mbox img { border-radius:0 0 12px 12px; }
+@media (max-width:820px) { .term { max-width:100%; } }
+
+.hero { grid-template-columns:1.1fr minmax(300px,.9fr); }
+.who { display:flex; align-items:center; gap:1rem; margin-top:2rem; }
+.avatar { width:3.6rem; height:3.6rem; border-radius:50%; object-fit:cover; object-position:50% 20%; filter:grayscale(1); border:2px solid var(--accent); transition:filter .5s; } .avatar:hover { filter:none; }
+.who .role { margin:0; color:var(--text); }
+.avail { display:flex; align-items:center; gap:.5rem; color:var(--muted); font-size:.88rem; margin-top:.15rem; }
+.dot { background:var(--accent); box-shadow:0 0 0 4px color-mix(in srgb, var(--accent) 25%, transparent); }
+.hero .term { margin-top:0; max-width:none; font-size:.92rem; } .hero .term .term-body { min-height:15rem; }
+.term-bar i:nth-child(3), .mbar i:nth-child(3) { background:#8FA8E0; }
+.about .lead { font-size:clamp(1.7rem,3vw,2.5rem); line-height:1.25; max-width:26ch; }
+.stack dd { display:flex; flex-wrap:wrap; gap:.45rem; }
+.stack dd span { font-size:.84rem; padding:.3rem .8rem; border-radius:99px; border:1px solid var(--border); background:var(--bg2); transition:border-color .2s, color .2s; } .stack dd span:hover { border-color:var(--accent); color:var(--accent); }
+.proj { align-items:start; }
+@media (min-width:821px) { .proj-media { position:sticky; top:5.5rem; } }
+
+.hero::before { content:none; }
+.avatar { width:8.5rem; height:8.5rem; filter:none; border-width:2px; }
+.who { gap:1.4rem; }
+.ic { width:1.7rem; height:1.7rem; background:currentColor; -webkit-mask:var(--ic) center/contain no-repeat; mask:var(--ic) center/contain no-repeat; }
+.marquee { padding:1.4rem 0; }
+.track span { font:500 1.05rem 'DM Sans', sans-serif; font-style:normal; gap:.75rem; margin-right:3.4rem; color:var(--muted); }
+.track span::after { display:none; }
+
+.about { grid-template-columns:1fr; gap:3.5rem; }
+.about .lead { font-family:'Bricolage Grotesque', sans-serif; font-weight:500; font-size:clamp(1.8rem,3.4vw,2.8rem); line-height:1.18; letter-spacing:-.02em; max-width:30ch; }
+.stack { display:grid; grid-template-columns:repeat(3,1fr); gap:2.5rem; }
+.stack div, .stack div:first-child { display:block; padding:1.2rem 0 0; border-top:1px solid var(--text); border-bottom:0; }
+.stack dt { font:600 1.4rem 'Bricolage Grotesque', sans-serif; letter-spacing:-.01em; text-transform:none; color:var(--text); padding:0 0 1rem; }
+.stack dd { display:block; }
+.stack dd span { display:block; padding:.6rem 0; border:0; border-bottom:1px solid var(--border); border-radius:0; background:none; font-size:1rem; transition:color .2s, padding-left .3s cubic-bezier(.16,1,.3,1); }
+.stack dd span:hover { color:var(--accent); padding-left:.5rem; border-color:var(--border); }
+
+.proj { grid-template-columns:1.1fr 1fr; grid-template-areas:"title desc" "media media" "story story" "tech acts"; gap:1.6rem clamp(1.5rem,4vw,4rem); padding:3.5rem 0; align-items:end; border-top:1px solid var(--border); animation:none; }
+.proj-body { display:contents; }
+.proj-body h3 { grid-area:title; } .proj .desc { grid-area:desc; margin:0; max-width:none; }
+.proj-media { grid-area:media; position:static; }
+.story { grid-area:story; grid-template-columns:repeat(4,1fr); gap:1.5rem; margin:.5rem 0 0; }
+.story div { border-top:1px solid var(--border); padding-top:1rem; }
+.tech { grid-area:tech; margin:0; align-self:center; } .acts { grid-area:acts; margin:0; justify-content:flex-end; }
+.shot:hover, .shot:hover img, .thumbs img:hover { transform:none; }
+.shot img { aspect-ratio:16/9; object-position:top; }
+.thumbs { grid-template-columns:repeat(4,minmax(0,9rem)); }
+@media (max-width:820px) {
+  .proj { grid-template-columns:1fr; grid-template-areas:"title" "desc" "media" "story" "tech" "acts"; }
+  .story, .stack { grid-template-columns:1fr; } .acts { justify-content:flex-start; }
 }
 
-/* ── SECTIONS ─────────────────────────────────── */
-.section {
-  max-width:1140px; margin:0 auto;
-  padding: 6rem 2.5rem;
-  border-top:1px solid var(--border);
-}
-.section-head {
-  display:flex; align-items:baseline; gap:0.75rem;
-  margin-bottom:3.5rem;
-  font-family:'JetBrains Mono', monospace;
-}
-.sec-num   { font-size:0.7rem; font-weight:700; letter-spacing:0.1em; }
-.sec-sep   { color:var(--muted); font-size:0.8rem; }
-.sec-title { font-size:0.78rem; color:var(--muted); letter-spacing:0.05em; }
+h1 em { background:linear-gradient(var(--accent),var(--accent)) 0 94%/0 .05em no-repeat; animation:draw 1.2s .8s cubic-bezier(.16,1,.3,1) forwards; }
+@keyframes draw { to { background-size:100% .05em; } }
+h1 .rv { transition:font-weight .5s; } h1 .rv:hover { font-weight:600; }
 
-/* ── BIO ──────────────────────────────────────── */
-.bio-layout {
-  display:grid; grid-template-columns:200px 1fr 1fr; gap:3rem; align-items:start;
-}
-.bio-photo-wrap {
-  position:relative;
-}
-.bio-photo {
-  width:200px; height:260px;
-  object-fit:cover; object-position:center 15%;
-  border:1px solid var(--border);
-  border-radius:4px;
-  filter:grayscale(20%);
-  transition:filter 0.4s, border-color 0.3s;
-}
-.bio-photo:hover { filter:grayscale(0%); border-color:var(--green); }
-.bio-photo-badge {
-  position:absolute; bottom:-0.75rem; left:50%; transform:translateX(-50%);
-  white-space:nowrap;
-  background:var(--bg2); border:1px solid var(--border);
-  padding:0.25rem 0.75rem; border-radius:3px;
-  font-family:'JetBrains Mono', monospace;
-  font-size:0.65rem; color:var(--muted);
-  letter-spacing:0.08em;
-}
-.bio-code-block {
-  background:var(--bg2); border:1px solid var(--border);
-  border-radius:6px; padding:1.5rem;
-  font-family:'JetBrains Mono', monospace;
-  font-size:0.78rem; line-height:1.8;
-}
-.code-preview { white-space:pre; overflow-x:auto; }
-.kw  { color:var(--cyan); }
-.var { color:var(--text); }
-.op  { color:var(--muted); }
-.key { color:var(--green); }
-.str { color:#FFB86C; }
-.bio-text p {
-  font-size:0.92rem; line-height:1.85; color:var(--muted); margin-bottom:2rem;
-}
-.bio-text strong { color:var(--text); font-weight:500; }
-.skill-cards { display:flex; flex-direction:column; gap:1rem; }
-.skill-card {
-  background:var(--bg2); border:1px solid var(--border);
-  border-radius:6px; padding:1rem 1.2rem;
-  transition:border-color 0.2s;
-}
-.skill-card:hover { border-color:var(--green); }
-.skill-card p { font-size:0.82rem; color:var(--muted); margin-top:0.4rem; line-height:1.6; }
-.skill-tag {
-  font-family:'JetBrains Mono', monospace;
-  font-size:0.62rem; letter-spacing:0.15em; font-weight:700;
-  padding:0.2rem 0.5rem; border-radius:3px;
-}
-.skill-tag.backend  { background:rgba(0,212,255,0.1); color:var(--cyan); }
-.skill-tag.frontend { background:rgba(0,255,156,0.1); color:var(--green); }
-.skill-tag.tools    { background:rgba(255,71,87,0.1);  color:var(--red); }
+#sobre-mi > h2 { text-align:center; }
+.about .lead { font-family:'Plus Jakarta Sans', sans-serif; font-weight:500; font-size:clamp(1.5rem,2.6vw,2.1rem); line-height:1.4; letter-spacing:-.015em; max-width:34ch; margin-inline:auto; text-align:center; }
+.stack dt { font-family:'Plus Jakarta Sans', sans-serif; font-weight:600; font-size:1.15rem; }
 
-/* ── PROJECTS ─────────────────────────────────── */
-.projects-grid { display:grid; grid-template-columns:1fr 1fr; gap:2rem; }
-.project-card {
-  background:var(--bg2); border:1px solid var(--border);
-  border-radius:8px; overflow:hidden; cursor:pointer;
-  transition:border-color 0.3s, transform 0.3s, box-shadow 0.3s;
-}
-.project-card:hover {
-  border-color:var(--green);
-  transform:translateY(-4px);
-  box-shadow:0 0 30px rgba(0,255,156,0.08);
-}
-.proj-img-wrap { position:relative; height:220px; overflow:hidden; }
-.proj-img { width:100%; height:100%; object-fit:cover; filter:grayscale(40%); transition:filter 0.5s, transform 0.5s; }
-.project-card:hover .proj-img { filter:grayscale(0%); transform:scale(1.04); }
-.proj-img-overlay {
-  position:absolute; inset:0;
-  background:rgba(0,255,156,0.06);
-  display:flex; align-items:center; justify-content:center;
-  opacity:0; transition:opacity 0.3s;
-}
-.project-card:hover .proj-img-overlay { opacity:1; }
-.proj-open-hint {
-  font-family:'JetBrains Mono', monospace;
-  font-size:0.78rem; color:var(--green);
-  border:1px solid var(--green);
-  padding:0.4rem 1rem; border-radius:3px;
-  background:rgba(0,0,0,0.7);
-}
-.proj-scanlines {
-  position:absolute; inset:0; pointer-events:none;
-  background:repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,255,156,0.02) 2px, rgba(0,255,156,0.02) 4px);
-}
-.proj-thumbs {
-  position:absolute; bottom:0.75rem; right:0.75rem; z-index:10;
-  display:flex; gap:0.4rem;
-  opacity:0; transform:translateY(6px);
-  transition:opacity 0.3s, transform 0.3s;
-}
-.project-card:hover .proj-thumbs { opacity:1; transform:translateY(0); }
-.proj-thumb {
-  width:40px; height:40px; object-fit:cover;
-  border:1px solid rgba(0,255,156,0.4); border-radius:3px;
-  cursor:pointer; transition:border-color 0.2s, transform 0.2s;
-}
-.proj-thumb:hover { border-color:var(--green); transform:scale(1.1); }
-
-.proj-info { padding:1.5rem; }
-.proj-path {
-  font-family:'JetBrains Mono', monospace;
-  font-size:0.68rem; color:var(--muted); margin-bottom:0.6rem;
-}
-.proj-slug { color:var(--text); }
-.proj-title {
-  font-size:1.35rem; font-weight:700; letter-spacing:-0.02em;
-  margin-bottom:0.6rem; transition:color 0.2s;
-}
-.project-card:hover .proj-title { color:var(--green); }
-.proj-desc { font-size:0.82rem; color:var(--muted); line-height:1.7; margin-bottom:1.2rem; }
-.proj-story { display:grid; gap:0; margin:0 0 1.2rem; border-top:1px solid var(--border); }
-.story-item {
-  display:grid; grid-template-columns:6.7rem 1fr; gap:0.8rem;
-  padding:0.72rem 0; border-bottom:1px solid var(--border);
-}
-.story-item dt {
-  color:var(--green); font:600 0.61rem/1.55 'JetBrains Mono', monospace;
-  text-transform:uppercase;
-}
-.story-item dd { color:var(--muted); font-size:0.76rem; line-height:1.55; }
-.proj-tech-row { display:flex; flex-wrap:wrap; gap:0.4rem; margin-bottom:1.2rem; }
-.tech-pill {
-  font-family:'JetBrains Mono', monospace;
-  font-size:0.6rem; padding:0.2rem 0.6rem;
-  border:1px solid var(--border); border-radius:3px; color:var(--muted);
-  transition:border-color 0.2s, color 0.2s;
-}
-.project-card:hover .tech-pill { border-color:rgba(0,255,156,0.3); color:var(--text); }
-.proj-actions { display:flex; gap:0.8rem; }
-.btn-ghost {
-  font-family:'JetBrains Mono', monospace;
-  font-size:0.7rem; padding:0.45rem 1rem;
-  border:1px solid var(--border); color:var(--muted);
-  border-radius:4px; transition:border-color 0.2s, color 0.2s;
-}
-.btn-ghost:hover { border-color:var(--cyan); color:var(--cyan); }
-.btn-solid {
-  font-family:'JetBrains Mono', monospace;
-  font-size:0.7rem; padding:0.45rem 1rem;
-  background:var(--green); color:#000; font-weight:700;
-  border-radius:4px; border:none; transition:opacity 0.2s, transform 0.2s;
-}
-.btn-solid:hover { opacity:0.85; transform:scale(1.02); }
-
-.loading-bar {
-  height:2px; background:var(--border); border-radius:2px;
-  overflow:hidden; margin-bottom:1rem;
-}
-.loading-progress {
-  height:100%; width:40%; background:var(--green);
-  animation:loadAnim 1.2s ease-in-out infinite;
-}
-@keyframes loadAnim { 0%{transform:translateX(-100%)} 100%{transform:translateX(300%)} }
-.loading-text {
-  font-family:'JetBrains Mono', monospace;
-  font-size:0.75rem; color:var(--muted); letter-spacing:0.1em;
-}
-
-/* ── CONTACT ──────────────────────────────────── */
-.contact-layout { display:grid; grid-template-columns:1fr 1.2fr; gap:4rem; align-items:center; }
-.contact-h2 {
-  font-size:clamp(2.2rem, 4vw, 3.5rem);
-  font-weight:700; line-height:1.1; letter-spacing:-0.03em;
-  margin-bottom:1rem;
-}
-.contact-h2 em { color:var(--green); font-style:normal; }
-.contact-sub { font-size:0.9rem; color:var(--muted); }
-.contact-list { display:flex; flex-direction:column; }
-.contact-row {
-  display:grid; grid-template-columns:120px 1fr auto;
-  align-items:center; gap:1rem;
-  padding:1.2rem 0;
-  border-bottom:1px solid var(--border);
-  font-size:0.88rem; color:var(--muted);
-  transition:color 0.2s, background 0.2s;
-  position:relative;
-}
-.contact-row::after {
-  content:''; position:absolute; bottom:-1px; left:0;
-  height:1px; width:0;
-  background:var(--green);
-  transition:width 0.4s cubic-bezier(0.77,0,0.175,1);
-}
-.contact-row:hover::after { width:100%; }
-.contact-row:hover { color:var(--text); }
-.contact-cmd {
-  font-family:'JetBrains Mono', monospace;
-  font-size:0.72rem; white-space:nowrap;
-}
-.contact-val { font-size:0.85rem; }
-.contact-arrow { font-size:1rem; color:var(--green); transition:transform 0.2s; }
-.contact-row:hover .contact-arrow { transform:translate(3px,-3px); }
-
-/* ── FOOTER ───────────────────────────────────── */
-.footer {
-  border-top:1px solid var(--border);
-  padding:1.8rem 2.5rem;
-  display:flex; align-items:center; gap:1rem;
-  font-family:'JetBrains Mono', monospace;
-  font-size:0.68rem; letter-spacing:0.08em;
-}
-.footer-right { margin-left:auto; }
-
-/* ── MODAL ────────────────────────────────────── */
-.modal-overlay {
-  position:fixed; inset:0; z-index:100;
-  background:rgba(4,4,4,0.97);
-  display:flex; align-items:center; justify-content:center;
-  animation:fadeIn 0.2s ease-out;
-}
-@keyframes fadeIn { from{opacity:0} to{opacity:1} }
-.modal-close {
-  position:absolute; top:1.5rem; right:1.5rem;
-  background:none; border:1px solid var(--border); color:var(--muted);
-  width:2.5rem; height:2.5rem;
-  display:flex; align-items:center; justify-content:center;
-  cursor:pointer; font-size:0.9rem; border-radius:4px;
-  transition:border-color 0.2s, color 0.2s;
-}
-.modal-close:hover { border-color:var(--red); color:var(--red); }
-.modal-nav {
-  position:absolute; top:50%; transform:translateY(-50%);
-  background:rgba(17,17,17,0.9); border:1px solid var(--border); color:var(--muted);
-  width:3rem; height:3rem;
-  display:flex; align-items:center; justify-content:center;
-  cursor:pointer; font-size:1.1rem; border-radius:4px; z-index:110;
-  transition:border-color 0.2s, color 0.2s;
-}
-.modal-nav.left  { left:1.5rem; }
-.modal-nav.right { right:1.5rem; }
-.modal-nav:hover { border-color:var(--green); color:var(--green); }
-.modal-box {
-  background:var(--bg2); border:1px solid var(--border);
-  border-radius:8px; overflow:hidden;
-  max-width:min(1000px, 90vw); width:100%;
-  box-shadow:0 0 60px rgba(0,255,156,0.06);
-  animation:zoomIn 0.25s ease-out;
-}
-@keyframes zoomIn { from{transform:scale(0.97);opacity:0} to{transform:scale(1);opacity:1} }
-.modal-term-bar {
-  display:flex; align-items:center; gap:0.5rem;
-  padding:0.6rem 1rem; background:var(--bg3);
-  border-bottom:1px solid var(--border);
-  font-family:'JetBrains Mono', monospace; font-size:0.7rem;
-}
-.modal-path { margin-left:0.5rem; color:var(--muted); }
-.modal-img { width:100%; max-height:75vh; object-fit:contain; display:block; }
-.modal-footer-bar {
-  display:flex; justify-content:space-between; align-items:center;
-  padding:0.7rem 1rem;
-  border-top:1px solid var(--border);
-  font-family:'JetBrains Mono', monospace; font-size:0.72rem;
-}
-.modal-title-txt { color:var(--text); }
-.modal-counter { color:var(--muted); }
-
-/* Light theme: keep every surface in the same muted, high-contrast palette. */
-:host-context(body.light) .nav.scrolled {
-  background:rgba(244,247,246,0.92);
-  box-shadow:0 1px 18px rgba(23,32,51,0.08);
-}
-:host-context(body.light) .terminal-window {
-  background:rgba(255,255,255,0.96);
-  box-shadow:0 0 40px rgba(15,118,110,0.08), 0 20px 60px rgba(23,32,51,0.13);
-}
-:host-context(body.light) .scanlines {
-  background:repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 2px,
-    rgba(15,118,110,0.025) 2px,
-    rgba(15,118,110,0.025) 4px
-  );
-}
-:host-context(body.light) .str { color:#9A4F0D; }
-:host-context(body.light) .skill-tag.backend { background:rgba(3,105,161,0.10); }
-:host-context(body.light) .skill-tag.frontend { background:rgba(15,118,110,0.10); }
-:host-context(body.light) .skill-tag.tools { background:rgba(180,35,60,0.09); }
-:host-context(body.light) .project-card:hover {
-  box-shadow:0 12px 32px rgba(15,118,110,0.13);
-}
-:host-context(body.light) .proj-img-overlay { background:rgba(15,118,110,0.08); }
-:host-context(body.light) .proj-thumb { border-color:rgba(15,118,110,0.5); }
-:host-context(body.light) .project-card:hover .tech-pill { border-color:rgba(15,118,110,0.45); }
-:host-context(body.light) .modal-overlay { background:rgba(23,32,51,0.88); }
-:host-context(body.light) .modal-nav {
-  background:rgba(255,255,255,0.96);
-}
-:host-context(body.light) .modal-close {
-  background:rgba(255,255,255,0.96);
-}
-:host-context(body.light) .modal-box {
-  box-shadow:0 0 60px rgba(0,0,0,0.28);
-}
-
-/* ── RESPONSIVE ───────────────────────────────── */
-@media (max-width: 768px) {
-  .nav { padding:1rem 1.2rem; }
-  .nav-links { display:none; }
-  .hero { padding:5rem 1.2rem 3rem; gap:2rem; }
-  .terminal-window { font-size:0.7rem; }
-  .hero-name { font-size:clamp(2.8rem, 12vw, 4rem); }
-  .section { padding:3.5rem 1.2rem; }
-  .bio-layout { grid-template-columns:1fr; }
-  .bio-photo { width:180px; height:230px; margin:0 auto; display:block; }
-  .bio-photo-wrap { margin-bottom:1.5rem; display:flex; justify-content:center; }
-  .projects-grid { grid-template-columns:1fr; }
-  .story-item { grid-template-columns:1fr; gap:0.25rem; }
-  .contact-layout { grid-template-columns:1fr; gap:2rem; }
-  .contact-row { grid-template-columns:90px 1fr auto; }
-  .footer { padding:1.5rem 1.2rem; flex-wrap:wrap; gap:0.5rem; }
-  .footer-right { width:100%; margin-left:0; }
-}
+.proj-media { max-width:62rem; width:100%; }
+.proj .desc { font-size:1.05rem; }
+.story dt { font-size:.82rem; } .story dd { font-size:1.02rem; line-height:1.6; }
   `]
 })
-export class App implements OnInit, OnDestroy, AfterViewInit {
-  @ViewChild('heroCanvas') canvasRef!: ElementRef<HTMLCanvasElement>;
+export class App implements OnInit, OnDestroy {
   private animFrame: any;
   private resizeObs!: ResizeObserver;
-  proyectos: any[]  = [];
-  isLight: boolean  = false;
-  isEn: boolean     = false;
-  scrolled: boolean = false;
-  glitchOn: boolean = false;
-  proyectoActivo: any = null;
-  indexFoto: number   = 0;
-  termVisible: number = 0;
-  termDone: boolean   = false;
   private termTimer: any;
+  termVisible = 0;
+  termDone = false;
+  termLines: any[] = [
+    { prompt: 'elian@portfolio:~$', text: 'whoami', cls: 't-cmd' },
+    { prompt: '', text: 'Elian Ferreyra — Dev Fullstack', cls: 't-out' },
+    { prompt: 'elian@portfolio:~$', text: 'cat stack.txt', cls: 't-cmd' },
+    { prompt: '', text: 'Java · Spring · Angular · SQL · NextJs · NodeJs', cls: 't-ok' },
+    { prompt: 'elian@portfolio:~$', text: 'ping recruiter', cls: 't-cmd' },
+    { prompt: '', key: 'termOk', cls: 't-ok' },
+  ];
+  stackList = [
+    { n: 'Java', i: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-plain.svg' },
+    { n: 'Spring Boot', i: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/spring/spring-original.svg' },
+    { n: 'Angular', i: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/angular/angular-plain.svg' },
+    { n: 'Next.js', i: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-plain.svg' },
+    { n: 'TypeScript', i: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-plain.svg' },
+    { n: 'PostgreSQL', i: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-plain.svg' },
+    { n: 'Supabase', i: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/supabase/supabase-plain.svg' },
+    { n: 'Docker', i: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-plain.svg' },
+  ];
+  stackGroups = [
+    { k: 'backend', items: ['Java 17+', 'Spring Boot', 'Hibernate/JPA', 'PostgreSQL', 'REST APIs', 'Node.js', 'Supabase'] },
+    { k: 'frontend', items: ['Angular 18+', 'Next.js', 'TypeScript', 'Tailwind CSS'] },
+    { k: 'tools', items: ['Git', 'GitHub', 'Docker', 'Maven', 'Postman', 'Vercel'] },
+  ];
+  proyectos: any[] = [];
+  isLight = false;
+  isEn = false;
+  scrolled = false;
+  proyectoActivo: any = null;
+  indexFoto = 0;
 
-  es = {
-    navProyectos: 'proyectos', navBio: 'bio', navContacto: 'contacto',
+  es: any = {
+    menu: 'Principal', codeNombre: 'nombre', codeRol: 'rol', codeBase: 'base', codeFoco: 'foco', codeFocoVal: 'código mantenible y escalable', termOk: '✔ disponible para proyectos', navProyectos: 'Proyectos', navBio: 'Sobre mí', navContacto: 'Contacto',
+    cv: 'CV', idioma: 'Cambiar idioma',
+    role: 'Desarrollador Fullstack · Argentina',
     heroCore: 'para el core.', heroInterface: 'para la interfaz.',
-    available: 'disponible',
-    codeNombre: 'nombre', codeRol: 'rol', codeBase: 'base', codeFoco: 'foco',
-    codesFocoVal: 'código mantenible y escalable',
+    available: 'Disponible para proyectos',
+    tituloBio: 'Sobre mí', tituloProy: 'Proyectos',
+    backend: 'Backend', frontend: 'Frontend', tools: 'Herramientas',
     bioText: 'Desarrollo con foco en la mantenibilidad y claridad del código. Me gusta construir soluciones que no solo funcionen hoy, sino que sean fáciles de entender y escalar mañana.',
-    verGaleria: 'ver galería',
+    verGaleria: 'Ver galería',
     problema: 'Problema', decision: 'Decisión', impacto: 'Impacto', aprendizaje: 'Aprendizaje',
     activarClaro: 'Activar tema claro', activarOscuro: 'Activar tema oscuro',
-    loading: 'inicializando sistema...',
+    loading: 'Cargando proyectos…',
     contactH2a: '¿Trabajamos', contactH2b: 'juntos?',
     contactSub: 'Abierto a proyectos freelance y posiciones full-time.',
+    mail: 'Correo', cerrar: 'Cerrar', anterior: 'Foto anterior', siguiente: 'Foto siguiente',
     footerMade: 'Hecho con Angular + TypeScript',
   };
 
-  en = {
-    navProyectos: 'projects', navBio: 'bio', navContacto: 'contact',
+  en: any = {
+    menu: 'Main', codeNombre: 'name', codeRol: 'role', codeBase: 'location', codeFoco: 'focus', codeFocoVal: 'maintainable and scalable code', termOk: '✔ available for projects', navProyectos: 'Projects', navBio: 'About', navContacto: 'Contact',
+    cv: 'Résumé', idioma: 'Switch language',
+    role: 'Fullstack Developer · Argentina',
     heroCore: 'for the core.', heroInterface: 'for the interface.',
-    available: 'available',
-    codeNombre: 'name', codeRol: 'role', codeBase: 'location', codeFoco: 'focus',
-    codesFocoVal: 'maintainable and scalable code',
+    available: 'Available for projects',
+    tituloBio: 'About', tituloProy: 'Projects',
+    backend: 'Backend', frontend: 'Frontend', tools: 'Tools',
     bioText: 'I build with a focus on maintainability and code clarity. I like to create solutions that not only work today, but are easy to understand and scale tomorrow.',
-    verGaleria: 'view gallery',
+    verGaleria: 'View gallery',
     problema: 'Problem', decision: 'Decision', impacto: 'Impact', aprendizaje: 'Learning',
     activarClaro: 'Switch to light theme', activarOscuro: 'Switch to dark theme',
-    loading: 'initializing system...',
+    loading: 'Loading projects…',
     contactH2a: "Let's work", contactH2b: 'together.',
     contactSub: 'Open to freelance projects and full-time positions.',
+    mail: 'Email', cerrar: 'Close', anterior: 'Previous photo', siguiente: 'Next photo',
     footerMade: 'Built with Angular + TypeScript',
   };
 
   get t() { return this.isEn ? this.en : this.es; }
 
-  termLines = [
-    { prompt: 'elian@portfolio:~$', text: 'whoami',                        cls: 't-cmd' },
-    { prompt: '',                   text: 'Elian Ferreyra — Dev Fullstack', cls: 't-out' },
-    { prompt: 'elian@portfolio:~$', text: 'cat stack.txt',                 cls: 't-cmd' },
-    { prompt: '',                   text: 'Java · Spring · Angular · SQL · NextJs · NodeJs', cls: 't-ok'  },
-    { prompt: 'elian@portfolio:~$', text: 'ping recruiter',                cls: 't-cmd' },
-    { prompt: '',                   text: '✔ disponible para proyectos',   cls: 't-ok'  },
-  ];
+  // Texto de proyecto: usa el campo "<campo>_en" del JSON cuando el idioma es inglés.
+  tx(p: any, k: string): string { return (this.isEn && p[k + '_en']) || p[k]; }
 
   constructor(private projectService: ProjectService, private cdr: ChangeDetectorRef, private ngZone: NgZone) {}
 
   ngOnInit() {
     this.initTheme();
     this.isEn = localStorage.getItem('lang') === 'en';
+    document.documentElement.lang = this.isEn ? 'en' : 'es';
     this.loadProjects();
     this.startTerminalAnim();
   }
 
-  ngAfterViewInit() {
-    this.ngZone.runOutsideAngular(() => this.initCanvas());
-  }
-
-  initCanvas() {
-    const canvas = this.canvasRef.nativeElement;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-    const spacing = 32;
-    let w = 0, h = 0, t = 0;
-    const isDark = () => !this.isLight;
-
-    const resize = () => {
-      w = canvas.width  = canvas.offsetWidth;
-      h = canvas.height = canvas.offsetHeight;
-    };
-    resize();
-    this.resizeObs = new ResizeObserver(resize);
-    this.resizeObs.observe(canvas);
-
-    const draw = () => {
-      ctx.clearRect(0, 0, w, h);
-      const cols = Math.ceil(w / spacing) + 1;
-      const rows = Math.ceil(h / spacing) + 1;
-      const color = isDark() ? '0,255,156' : '15,118,110';
-
-      for (let c = 0; c < cols; c++) {
-        for (let r = 0; r < rows; r++) {
-          const x = c * spacing;
-          const y = r * spacing;
-          // Wave effect: distance from center + time
-          const dx = x - w / 2, dy = y - h / 2;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          const wave = Math.sin(dist * 0.015 - t * 0.8) * 0.5 + 0.5;
-          const alpha = wave * 0.18 + 0.02;
-          const radius = wave * 1.5 + 0.5;
-          ctx.beginPath();
-          ctx.arc(x, y, radius, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(${color},${alpha})`;
-          ctx.fill();
-        }
-      }
-      t += 0.04;
-      this.animFrame = requestAnimationFrame(draw);
-    };
-    draw();
+  slug(titulo: string): string {
+    return titulo.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
   }
 
   ngOnDestroy() {
@@ -931,6 +415,8 @@ export class App implements OnInit, OnDestroy, AfterViewInit {
       }, 350);
     });
   }
+
+
 
   initTheme() {
     const saved = localStorage.getItem('theme');
@@ -967,6 +453,7 @@ export class App implements OnInit, OnDestroy, AfterViewInit {
   toggleLang() {
     this.isEn = !this.isEn;
     localStorage.setItem('lang', this.isEn ? 'en' : 'es');
+    document.documentElement.lang = this.isEn ? 'en' : 'es';
     this.cdr.detectChanges();
   }
 
@@ -980,9 +467,6 @@ export class App implements OnInit, OnDestroy, AfterViewInit {
     this.projectService.getProjects().subscribe({
       next: (data) => {
         this.proyectos = data.map((p: any) => {
-          // La galería sale directo del JSON: "carpeta" es la subcarpeta en
-          // public/imagen/ y "totalFotos" cuántas foto1.png..fotoN.png hay ahí.
-          // Si un proyecto no define esos campos, usa solo su "imagen" como única foto.
           const galeria = (p.carpeta && p.totalFotos)
             ? Array.from({ length: p.totalFotos }, (_, j) => `imagen/${p.carpeta}/foto${j + 1}.png`)
             : [p.imagen];
@@ -991,10 +475,6 @@ export class App implements OnInit, OnDestroy, AfterViewInit {
         this.cdr.detectChanges();
       }
     });
-  }
-
-  slug(titulo: string): string {
-    return titulo.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
   }
 
   openModal(proyecto: any, startingImg?: string) {
