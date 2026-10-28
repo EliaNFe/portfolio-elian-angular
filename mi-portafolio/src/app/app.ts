@@ -65,7 +65,7 @@ import { ProjectService } from './services/project';
             <span class="shot-hint">{{ t.verGaleria }}</span>
           </button>
           <div class="thumbs">
-            <img *ngFor="let img of p.galeria?.slice(0,4)" [src]="img" alt=""
+            <img *ngFor="let img of p.galeria" [src]="img" alt=""
                  (mouseenter)="p.imagenSeleccionada = img" (click)="openModal(p, img)">
           </div>
           <p class="path"><span>~/proyectos/</span>{{ slug(p.titulo) }}</p>
@@ -296,6 +296,53 @@ h1 .rv { transition:font-weight .5s; } h1 .rv:hover { font-weight:600; }
 .proj-media { max-width:62rem; width:100%; }
 .proj .desc { font-size:1.05rem; }
 .story dt { font-size:.82rem; } .story dd { font-size:1.02rem; line-height:1.6; }
+
+h1, h2, h3, .big, .lead, .mark { font-weight:400; }
+h1 em, .big em { font-weight:400; }
+.about .lead { font-family:-apple-system, 'SF Pro Display', 'Inter', system-ui, sans-serif; font-weight:500; font-size:clamp(1.45rem,2.4vw,1.95rem); line-height:1.35; letter-spacing:-.022em; max-width:38ch; }
+.stack dt { font-family:-apple-system, 'SF Pro Display', 'Inter', system-ui, sans-serif; font-weight:600; font-size:1.05rem; letter-spacing:-.01em; }
+.stack dd span { font-family:-apple-system, 'SF Pro Text', 'Inter', system-ui, sans-serif; font-weight:400; font-size:1rem; }
+.lang-toggle, .theme-toggle { height:2.75rem; min-width:2.75rem; }
+.cv { padding:.7rem 1.1rem; }
+.path { font-size:.85rem; } .term-bar, .mbar { font-size:.82rem; }
+.marquee:hover .track { animation-play-state:paused; }
+@media (prefers-reduced-motion:reduce) { h1 em { animation:none; background-size:100% .05em; } }
+.who { flex-direction:column; align-items:flex-start; gap:.65rem; }
+.thumbs { display:flex; flex-wrap:nowrap; width:100%; max-width:100%; min-width:0; gap:.65rem; overflow-x:auto; overflow-y:hidden; padding:.25rem .1rem .7rem; scroll-snap-type:x mandatory; scrollbar-width:thin; scrollbar-color:var(--accent) var(--bg2); }
+.thumbs::-webkit-scrollbar { height:6px; }
+.thumbs::-webkit-scrollbar-track { background:var(--bg2); border-radius:99px; }
+.thumbs::-webkit-scrollbar-thumb { background:var(--accent); border-radius:99px; }
+.thumbs img { flex:0 0 clamp(5rem,12vw,7rem); width:clamp(5rem,12vw,7rem); max-width:none; object-fit:contain; background:var(--bg2); scroll-snap-align:start; }
+.shot { aspect-ratio:16/9; }
+.shot img { width:100%; height:100%; aspect-ratio:16/9; object-fit:contain; object-position:center; background:var(--bg2); }
+@media (max-width:820px) {
+  .hero { grid-template-columns:minmax(0,1fr); width:100%; min-width:0; gap:2rem; }
+  .hero-text { width:100%; min-width:0; text-align:center; }
+  .hero-text h1 { align-items:center; }
+  .hero-text h1 em { padding-left:0; }
+  .who { align-items:center; margin-inline:auto; }
+  .who > div { text-align:center; }
+  .who .avail { display:flex; justify-content:center; align-items:center; gap:.55rem; }
+  .hero .term { width:100%; min-width:0; max-width:100%; margin-top:0; font-size:clamp(.68rem,2.5vw,.82rem); }
+  .term-body, .tl { min-width:0; overflow-wrap:anywhere; }
+  .who { width:100%; min-width:0; flex-direction:column; align-items:flex-start; gap:.65rem; }
+  .who { align-items:center; }
+  .avatar { flex:none; width:clamp(5rem,24vw,6.5rem); height:clamp(5rem,24vw,6.5rem); }
+  .who > div { min-width:0; }
+  .who .role, .who .avail { font-size:clamp(.78rem,3.5vw,.95rem); line-height:1.4; overflow-wrap:anywhere; }
+  .proj, .proj-media, .shot { min-width:0; width:100%; max-width:100%; }
+  .shot { aspect-ratio:16/9; }
+  .shot img { display:block; width:100%; max-width:100%; height:100%; aspect-ratio:16/9; object-fit:contain; object-position:center; background:var(--bg2); }
+  .thumbs { display:flex; flex-wrap:nowrap; width:100%; max-width:100%; min-width:0; gap:.65rem; overflow-x:auto; overflow-y:hidden; padding:.25rem .1rem .7rem; scroll-snap-type:x mandatory; scrollbar-width:thin; scrollbar-color:var(--accent) var(--bg2); }
+  .thumbs::-webkit-scrollbar { height:6px; }
+  .thumbs::-webkit-scrollbar-track { background:var(--bg2); border-radius:99px; }
+  .thumbs::-webkit-scrollbar-thumb { background:var(--accent); border-radius:99px; }
+  .thumbs img { flex:0 0 clamp(5rem,23vw,7rem); width:clamp(5rem,23vw,7rem); max-width:none; object-fit:contain; background:var(--bg2); scroll-snap-align:start; }
+  .modal { padding:4rem .75rem; }
+  .mbox { width:100%; max-width:100%; }
+  .mbox img { display:block; width:auto; max-width:100%; height:auto; max-height:calc(100dvh - 12rem); object-fit:contain; }
+  .mbar span { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+}
   `]
 })
 export class App implements OnInit, OnDestroy {
